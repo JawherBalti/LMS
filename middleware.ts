@@ -27,9 +27,7 @@ export default auth((req) => {
             callbackUrl+= nextUrl.search
         }
         const encodedUrl = encodeURIComponent(callbackUrl)
-        console.log(callbackUrl);
         
-        console.log(encodedUrl)
         return Response.redirect(new URL(`/auth/login?callbackUrl=${encodedUrl}`, nextUrl))
     }
 
