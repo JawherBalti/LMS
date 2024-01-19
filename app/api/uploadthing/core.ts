@@ -7,13 +7,17 @@ const handleAuth = async () => {
     const user = await currentUser()
 
     if (!user?.id) throw new Error("Unauthorized")
-    return { userId: user.id }
+    return { userId: user.id, id: 1 }
 }
 
 export const ourFileRouter = {
+    profilePicture:f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+    .middleware(() => handleAuth())
+    .onUploadComplete(() => { }),
     courseImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
         .middleware(() => handleAuth())
-        .onUploadComplete(() => { }),
+        .onUploadComplete(async ({metadata}) => {console.log(metadata);
+         }),
     courseAttachment: f(["text", "image", "video", "audio", "pdf"])
         .middleware(() => handleAuth())
         .onUploadComplete(() => { }),
