@@ -1,7 +1,8 @@
 export const publicRoutes = [
     "/",
     "/auth/new-verification",
-    "/api/uploadthing"
+    "/api/uploadthing",
+    "/api/webhook"
 ]
 
 export const authRoutes = [
