@@ -2,11 +2,14 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node"
+import { UTApi } from "uploadthing/server";
 
 const { Video } = new Mux(
     process.env.MUX_TOKEN_ID!,
     process.env.MUX_TOKEN_SECRET!,
 )
+
+const utApi = new UTApi()
 
 export async function DELETE(req: Request, { params }: { params: { courseId: string, chapterId: string } }) {
     try {
@@ -32,6 +35,9 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
         if (!chapter) return new NextResponse("Not found", { status: 404 })
 
         if (chapter.videoUrl) {
+            const videoKey = chapter.videoUrl.split("/f/")
+            await utApi.deleteFiles(videoKey)
+
             const existingMuxData = await db.muxData.findFirst({
                 where: {
                     chapterId: params.chapterId
@@ -95,6 +101,19 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
         })
 
         if (!courseOwner) return new NextResponse("Unauthorized", { status: 401 })
+
+
+        const oldChapter = await db.chapter.findUnique({
+            where: {
+                id: params.chapterId,
+                courseId: params.courseId
+            }
+        })
+
+        if (oldChapter?.videoUrl) {
+            const videoKey = oldChapter.videoUrl.split("/f/")
+            await utApi.deleteFiles(videoKey)
+        }
 
         const chapter = await db.chapter.update({
             where: {
