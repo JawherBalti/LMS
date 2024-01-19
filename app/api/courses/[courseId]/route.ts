@@ -3,11 +3,14 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Mux from "@mux/mux-node";
 import { NextResponse } from "next/server";
+import { UTApi } from 'uploadthing/server'
 
 const { Video } = new Mux(
     process.env.MUX_TOKEN_ID!,
     process.env.MUX_TOKEN_SECRET!,
 )
+
+const utApi = new UTApi()
 
 export async function DELETE(req: Request, { params }: { params: { courseId: string } }) {
     try {
@@ -25,6 +28,11 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
                     include: {
                         muxData: true
                     }
+                },
+                attachments: {
+                    select: {
+                        url: true
+                    }
                 }
             }
         })
@@ -34,6 +42,21 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
             if (chapter.muxData?.assetId) {
                 await Video.Assets.del(chapter.muxData.assetId)
             }
+        }
+
+        const attachmentKeys = []
+        for (const attachment of course.attachments) {
+            if (attachment.url) {
+                const attachmentKey = attachment.url.split("/f/")[1]
+                attachmentKeys.push(attachmentKey)
+            }
+        }
+
+        if (attachmentKeys.length > 0) await utApi.deleteFiles(attachmentKeys)
+
+        if (course.imageUrl) {
+            const imageKey = course.imageUrl.split("/f/")[1] as string | string[]
+            await utApi.deleteFiles(imageKey)
         }
 
         const deletedCourse = await db.course.delete({
