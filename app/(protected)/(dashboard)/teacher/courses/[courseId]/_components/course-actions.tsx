@@ -10,11 +10,15 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface CourseActionsProps {
+  isCourseFree: boolean;
+  price: number;
   disabled: boolean;
   courseId: string;
   isPublished: boolean;
 }
 const CourseActions = ({
+  isCourseFree,
+  price,
   disabled,
   courseId,
   isPublished,
@@ -44,9 +48,15 @@ const CourseActions = ({
         await axios.patch(`/api/courses/${courseId}/unpublish`);
         toast.success("Course unpublished");
       } else {
+        if (price > 0 && isCourseFree) {
+          toast.error(
+            "All the chapters of this course are free but the course has a price. Please consider changing the price to 0 or make one chapter not free."
+          );
+          return router.refresh();
+        }
         await axios.patch(`/api/courses/${courseId}/publish`);
         toast.success("Course published");
-        confetti.onOpen()
+        confetti.onOpen();
       }
       router.refresh();
     } catch {
