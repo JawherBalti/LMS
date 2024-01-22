@@ -102,19 +102,6 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
 
         if (!courseOwner) return new NextResponse("Unauthorized", { status: 401 })
 
-
-        const oldChapter = await db.chapter.findUnique({
-            where: {
-                id: params.chapterId,
-                courseId: params.courseId
-            }
-        })
-
-        if (oldChapter?.videoUrl) {
-            const videoKey = oldChapter.videoUrl.split("/f/")
-            await utApi.deleteFiles(videoKey)
-        }
-
         const chapter = await db.chapter.update({
             where: {
                 id: params.chapterId,
@@ -126,6 +113,18 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
         })
 
         if (values.videoUrl) {
+            const oldChapter = await db.chapter.findUnique({
+                where: {
+                    id: params.chapterId,
+                    courseId: params.courseId
+                }
+            })
+
+            if (oldChapter?.videoUrl) {
+                const videoKey = oldChapter.videoUrl.split("/f/")
+                await utApi.deleteFiles(videoKey)
+            }
+
             const existingMuxData = await db.muxData.findFirst({
                 where: {
                     chapterId: params.chapterId
