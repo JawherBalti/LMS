@@ -1,4 +1,5 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -56,7 +57,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Course price ($)
         <Button onClick={toggleEdit} variant="ghost">
@@ -77,9 +78,13 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
             !initialData.price && "text-slate-500 italic"
           )}
         >
-          {initialData.price
-            ? formatPrice(initialData.price)
-            : "There is no price"}
+          {initialData.price === 0 ? (
+            <Badge>Free</Badge>
+          ) : initialData.price! > 0 ? (
+            formatPrice(initialData.price!)
+          ) : (
+            "There is no price"
+          )}
         </p>
       )}
       {isEditing && (
@@ -99,7 +104,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
                       step="0.01"
                       disabled={isSubmitting}
                       placeholder="Set a price for your course"
-                      className="bg-white"
+                      className="bg-white dark:bg-input"
                       {...field}
                     />
                   </FormControl>

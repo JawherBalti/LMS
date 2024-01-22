@@ -53,7 +53,7 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Chapter title
         <Button onClick={toggleEdit} variant="ghost">
@@ -81,7 +81,7 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-white"
+                      className="bg-white dark:bg-input"
                       disabled={isSubmitting}
                       placeholder="e.g. 'Course introduction'"
                       {...field}
