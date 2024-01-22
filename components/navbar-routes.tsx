@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { ExitIcon, BackpackIcon } from "@radix-ui/react-icons";
 import SearchInput from "./search-input";
+import { ModeToggle } from "./mode-toggle";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
@@ -38,6 +39,7 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         )}
+        <ModeToggle/>
         <UserButton />
       </div>
     </>
