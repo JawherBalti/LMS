@@ -8,6 +8,7 @@ import { Preview } from "@/components/preview";
 import { File } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import CourseProgressButton from "./_components/course-progress-button";
+import { CardTitle } from "@/components/ui/card";
 
 const ChpaterIdPage = async ({
   params,
@@ -59,9 +60,9 @@ const ChpaterIdPage = async ({
             completeOnEnd={completeOnEnd}
           />
         </div>
-        <div>
-          <div className="p-4 flex flex-col md:flex-row items-center justify-between">
-            <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
+        <div className="full">
+          <div className="p-4 flex flex-col md:flex-row items-center justify-between w-full">
+            <h2 className="text-2xl font-semibold mb-2 break-words line-clamp-1 w-full">{chapter.title}</h2>
             {purchase ? (
               <CourseProgressButton
                 chapterId={params.chapterId}
@@ -77,12 +78,15 @@ const ChpaterIdPage = async ({
             )}
           </div>
           <Separator />
-          <div>
+          <CardTitle className="p-4 pl-0">Course description:</CardTitle>
+            <p className="break-words pl-4 pb-4">{course.description}</p>
+          <Separator />
+          <CardTitle className="p-4 pl-0">Chapter description:</CardTitle>
             <Preview value={chapter.description!} />
-          </div>
+          <Separator />
+          <CardTitle className="p-4 pl-0">Attachments:</CardTitle>
           {attachments.length ? (
             <>
-              <Separator />
               <div className="p-4">
                 {attachments.map((att) => (
                   <a
@@ -98,7 +102,7 @@ const ChpaterIdPage = async ({
               </div>
             </>
           ) : (
-            "No attachments"
+            <span className="pl-4">No attachments</span>
           )}
         </div>
       </div>

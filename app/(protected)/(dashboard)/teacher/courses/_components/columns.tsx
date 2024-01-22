@@ -28,6 +28,13 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <p className="break-words sm:w-48 md:w-96 sm:line-clamp-3 md:line-clamp-2">
+          {row.getValue("title")}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "price",
@@ -42,14 +49,14 @@ export const columns: ColumnDef<Course>[] = [
         </Button>
       );
     },
-    cell: ({row}) => {
-        const price = parseFloat(row.getValue("price") || "0")
-        const formatted = new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: "USD"
-        }).format(price)
-        return formatted
-    }
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price") || "0");
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+      return formatted;
+    },
   },
   {
     accessorKey: "isPublished",

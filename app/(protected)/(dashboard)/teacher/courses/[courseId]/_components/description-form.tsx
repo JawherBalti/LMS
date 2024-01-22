@@ -56,7 +56,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Course description
         <Button onClick={toggleEdit} variant="ghost">
@@ -70,7 +70,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           )}
         </Button>
       </div>
-      {!isEditing && <p className={cn("text-sm mt-2", !initialData.description && "text-slate-500 italic")}>
+      {!isEditing && <p className={cn("text-sm mt-2 break-words", !initialData.description && "text-slate-500 italic")}>
         {initialData.description || 'There is no description'}
     </p>}
       {isEditing && (
@@ -86,7 +86,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
                 <FormItem>
                   <FormControl>
                     <Textarea
-                      className="bg-white"
+                      className="bg-white dark:bg-input"
                       disabled={isSubmitting}
                       placeholder="e.g. 'This course is about...'"
                       {...field}
