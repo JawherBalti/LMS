@@ -65,7 +65,7 @@ const ChapterAccessForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Chapter access
         <Button onClick={toggleEdit} variant="ghost">
@@ -103,7 +103,7 @@ const ChapterAccessForm = ({
               control={form.control}
               name="isFree"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-y-0 rounded-md space-x-3 border p-4">
+                <FormItem className="flex flex-row items-center space-y-0 rounded-md space-x-3 border p-4">
                   <FormControl>
                     <Checkbox
                       checked={field.value}

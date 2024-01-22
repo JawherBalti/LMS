@@ -25,7 +25,6 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   if (!user?.id) return redirect("/");
 
-
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
@@ -58,7 +57,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.title,
     course.description,
     course.imageUrl,
-    course.price,
+    course.price !== null,
     course.categoryId,
     course.chapters.some((chapter) => chapter.isPublished),
   ];
@@ -69,6 +68,8 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   const completionText = `(${completedFields}/${totalFields})`;
 
   const isComplete = requiredFields.every(Boolean);
+  const isCourseFree = course.chapters.every((chapter) => chapter.isFree);
+
   return (
     <>
       {!course.isPublished && (
@@ -88,12 +89,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl font-medium">Course setup</h1>
-            <span className="text-sm text-slate-700">
+            <span className="text-sm text-slate-700 dark:text-secondary-foreground">
               Complete all fields {completionText}
             </span>
           </div>
 
           <CourseActions
+            isCourseFree={isCourseFree}
+            price={course.price!}
             disabled={!isComplete}
             courseId={params.courseId}
             isPublished={course.isPublished}
@@ -131,7 +134,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 <IconBadge icon={CircleDollarSign} />
                 <h2 className="text-xl">Sell your course</h2>
               </div>
-              <PriceForm initialData={course} courseId={course.id} />
+              <PriceForm
+                initialData={course}
+                courseId={course.id}
+              />
             </div>
             <div>
               <div className="flex items-center gap-x-2">

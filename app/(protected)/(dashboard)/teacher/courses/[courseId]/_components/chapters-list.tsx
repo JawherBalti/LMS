@@ -70,7 +70,7 @@ const ChaptersList = ({ items, onReorder, onEdit }: ChaptersListProps) => {
                 {(provided) => (
                   <div
                     className={cn(
-                      "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
+                      "flex items-center gap-x-2 bg-slate-200 dark:bg-background border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
                       chapter.isPublished &&
                         "bg-sky-100 border-sky-200 text-sky-700"
                     )}
@@ -79,15 +79,15 @@ const ChaptersList = ({ items, onReorder, onEdit }: ChaptersListProps) => {
                   >
                     <div
                       className={cn(
-                        "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
+                        "px-2 py-3 border-r border-r-slate-200 dark:bg-background hover:bg-slate-300 rounded-l-md transition",
                         chapter.isPublished &&
                           "border-r-sky-200 hover:bg-sky-200"
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <Grip className="h5 w-5" />
+                      <Grip className="h5 w-5 dark:text-white" />
                     </div>
-                    {chapter.title}
+                    <span className="dark:text-white break-words line-clamp-1">{chapter.title}</span>
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
                       {chapter.isFree && <Badge>Free</Badge>}
                       <Badge
@@ -99,7 +99,7 @@ const ChaptersList = ({ items, onReorder, onEdit }: ChaptersListProps) => {
                         {chapter.isPublished ? "Published" : "Draft"}
                       </Badge>
                       <Pencil
-                        className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
+                        className="w-4 h-4 cursor-pointer dark:text-white hover:opacity-75 transition"
                         onClick={() => onEdit(chapter.id)}
                       />
                     </div>

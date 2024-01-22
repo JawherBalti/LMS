@@ -65,7 +65,7 @@ const ChapterIdPage = async ({
           <div className="flex items-center justify-between w-full">
             <div className="flex flex-col gap-y-2">
               <h1 className="text-2xl font-medium">Course setup</h1>
-              <span className="text-sm text-slate-700">
+              <span className="text-sm text-slate-700 dark:text-foreground">
                 Complete all fields {completionText}
               </span>
             </div>

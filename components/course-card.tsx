@@ -4,6 +4,7 @@ import { IconBadge } from "./icon-badge";
 import { BookOpen } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 import CourseProgress from "./course-progress";
+import { Badge } from "./ui/badge";
 
 interface CourseCardProps {
   id: string;
@@ -31,7 +32,7 @@ export const CourseCard = ({
           <Image fill className="object-cover" alt={title} src={imageUrl} />
         </div>
         <div className="flex flex-col pt-2">
-          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
+          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 break-words">
             {title}
           </div>
           <p className="text-xs text-muted-foreground">{category}</p>
@@ -49,8 +50,10 @@ export const CourseCard = ({
               value={progress}
               variant={progress === 100 ? "success" : "default"}
             />
+          ) : price === 0 ? (
+            <Badge className="w-12">Free</Badge>
           ) : (
-            <p className="text-md md:text-sm font-medium text-slate-700">
+            <p className="text-md md:text-sm font-medium text-slate-700 dark:text-secondary">
               {formatPrice(price)}
             </p>
           )}

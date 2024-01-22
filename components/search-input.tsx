@@ -32,12 +32,12 @@ const SearchInput = () => {
   }, [debouceValue, currentCategoryId, router, pathname]);
 
   return (
-    <div className="relative">
-      <Search className="h-4 w-4 absolute top-3 left-3 text-slate-600" />
+    <div className="relative flex items-center">
+      <Search className="h-4 w-4 absolute left-3 text-slate-600" />
       <Input
       value={value}
       onChange={(e) => setValue(e.target.value)}
-        className="w-full md:w-[300px] pl-9 rounded-full bg-slate-100 focus-visible:ring-slate-200"
+        className="w-full md:w-[300px] pl-9 rounded-full bg-slate-100 dark:bg-secondary focus-visible:ring-slate-200"
         placeholder="Search for a course"
       />
     </div>

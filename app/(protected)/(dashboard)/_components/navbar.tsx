@@ -8,7 +8,7 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="border-b p-4 h-full flex items-center bg-white shadow-sm">
+    <nav className="border-b p-4 h-full flex items-center bg-white dark:bg-background shadow-sm">
       <MobileSidebar />
       <NavbarRoutes />
     </nav>

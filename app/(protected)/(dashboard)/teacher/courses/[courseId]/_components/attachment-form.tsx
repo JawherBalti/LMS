@@ -50,7 +50,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Course attachment
         <Button onClick={toggleEdit} variant="ghost">
@@ -73,7 +73,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
               {initialData.attachments.map((att) => (
                 <div
                   key={att.id}
-                  className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
+                  className="flex items-center p-3 w-full bg-sky-100 dark:bg-secondary border-sky-200 border text-sky-700 rounded-md"
                 >
                   <File className="h-4 w-4 mr-2 flex-shrink-0" />
                   <p className="text-xs line-clamp-1">{att.name}</p>
