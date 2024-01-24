@@ -100,8 +100,12 @@ const SettingsPage = () => {
                   </FormItem>
                 )}
               />
-              <Separator />
-              <CardTitle>Change password</CardTitle>
+              {!user?.isOAuth && (
+                <>
+                  <Separator />
+                  <CardTitle>Change password</CardTitle>
+                </>
+              )}
               {user?.isOAuth === false && (
                 <>
                   <FormField
@@ -142,8 +146,12 @@ const SettingsPage = () => {
                   />
                 </>
               )}
-              <Separator />
-              <CardTitle>2 factor authentication</CardTitle>
+              {!user?.isOAuth && (
+                <>
+                  <Separator />
+                  <CardTitle>2 factor authentication</CardTitle>
+                </>
+              )}
               {user?.isOAuth === false && (
                 <FormField
                   control={form.control}
