@@ -1,10 +1,12 @@
-import { Category, Course } from "@prisma/client";
+import { Category, Course, Review } from "@prisma/client";
 import { CourseCard } from "./course-card";
 
 type CourseWithProgressWithCategory = Course & {
   category: Category | null;
   chapters: { id: string }[];
   progress: number | null;
+  totalReviews: number
+  courseReview: number
 };
 
 interface CoursesListProps {
@@ -12,6 +14,7 @@ interface CoursesListProps {
 }
 
 const CoursesList = ({ items }: CoursesListProps) => {
+  
   return (
     <div>
       <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-4">
@@ -25,7 +28,9 @@ const CoursesList = ({ items }: CoursesListProps) => {
             price={item.price!}
             progress={item.progress}
             category={item?.category?.name!}
-          />
+            totalReviews={item.totalReviews}
+            courseReview={item.courseReview}
+            />
         ))}
       </div>
       {items.length === 0 && (

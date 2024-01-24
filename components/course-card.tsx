@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { IconBadge } from "./icon-badge";
-import { BookOpen } from "lucide-react";
-import { formatPrice } from "@/lib/format";
+import { BookOpen, Star } from "lucide-react";
+import { formatCourseReview, formatPrice, formatTotalReviews } from "@/lib/format";
 import CourseProgress from "./course-progress";
 import { Badge } from "./ui/badge";
 
@@ -14,6 +14,8 @@ interface CourseCardProps {
   price: number;
   progress: number | null;
   category: string;
+  totalReviews: number;
+  courseReview: number;
 }
 
 export const CourseCard = ({
@@ -24,12 +26,20 @@ export const CourseCard = ({
   price,
   progress,
   category,
+  totalReviews,
+  courseReview,
 }: CourseCardProps) => {
   return (
     <Link href={`/courses/${id}`}>
-      <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
+      <div className="flex flex-col group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
-          <Image fill className="object-cover" alt={title} src={imageUrl} />
+          <Image
+            sizes="100%"
+            fill
+            className="object-cover"
+            alt={title}
+            src={imageUrl}
+          />
         </div>
         <div className="flex flex-col pt-2">
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2 break-words">
@@ -44,6 +54,8 @@ export const CourseCard = ({
               </span>
             </div>
           </div>
+        </div>
+        <div className="flex-1">
           {progress !== null ? (
             <CourseProgress
               size="sm"
@@ -57,6 +69,20 @@ export const CourseCard = ({
               {formatPrice(price)}
             </p>
           )}
+        </div>
+
+        <div className="flex items-center justify-between ">
+          <span className="flex items-center gap-x-1">
+            {formatCourseReview(courseReview)}
+            <Star
+              size={20}
+              fill="rgb(234 179 8 / var(--tw-text-opacity))"
+              className=" text-yellow-500"
+            />
+          </span>
+          <span className="text-xs text-muted-foreground">
+            ({formatTotalReviews(totalReviews)} {totalReviews > 1 ? "Reviews" : "Review"})
+          </span>
         </div>
       </div>
     </Link>
