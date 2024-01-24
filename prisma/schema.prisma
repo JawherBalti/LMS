@@ -8,10 +8,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
-
 
 enum UserRole {
   ADMIN
@@ -28,6 +27,7 @@ model User {
   role                  UserRole               @default(USER)
   accounts              Account[]
   courses               Course[]
+  // comments              Comment[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -49,6 +49,8 @@ model Course {
   attachments Attachment[]
   chapters    Chapter[]
   purchases   Purchase[]
+  reviews     Review[]
+  // comments    Comment[]
 
   @@index([userId])
 }
@@ -125,8 +127,8 @@ model Purchase {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([courseId])
   @@unique([userId, courseId])
+  @@index([courseId])
 }
 
 model StripeCustomer {
@@ -191,3 +193,24 @@ model TwoFactorConfirmation {
 
   @@unique([userId])
 }
+
+model Review {
+  id       String  @id @default(cuid())
+  userId   String
+  courseId String?
+  review   Int
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+// model Comment {
+//   id        String   @id @default(cuid())
+//   userId    String
+//   courseId  String
+//   comment   String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+//   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+// }
