@@ -4,6 +4,8 @@ import { Chapter, Course, UserProgress } from "@prisma/client";
 import { redirect } from "next/navigation";
 import CourseSidebarItem from "./course-sidebar-item";
 import CourseProgress from "@/components/course-progress";
+import ReviewCourse from "./review-course";
+import DiscussionButton from "./discussion-button";
 
 interface CourseSidebarProps {
   course: Course & {
@@ -31,16 +33,14 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
     <div className="h-full border-r flex flex-col overflow-y-auto bg-background dark:bg-background shadow-sm">
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold break-words">{course.title}</h1>
-      {purchase && (
-        <div className="mt-10">
-          <CourseProgress
-          variant="success"
-          value={progressCount}
-          />
-        </div>
-      )}
+        {purchase && (
+          <div className="mt-10">
+            <CourseProgress variant="success" value={progressCount} />
+          </div>
+        )}
+        <ReviewCourse />
       </div>
-      
+
       <div className="flex flex-col w-full">
         {course.chapters.map((chapter) => (
           <CourseSidebarItem
@@ -52,6 +52,7 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
             isLocked={!chapter.isFree && !purchase}
           />
         ))}
+        <DiscussionButton courseId={course.id}/>
       </div>
     </div>
   );

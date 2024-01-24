@@ -1,11 +1,14 @@
 import { db } from "@/lib/db";
-import { Category, Course } from "@prisma/client";
+import { Category, Course, Review } from "@prisma/client";
 import { getProgress } from "./get-progress";
 
 type CourseWithProgressWithCategory = Course & {
     category: Category | null
     chapters: { id: string }[]
     progress: number | null
+    reviews: Review[] | null
+    totalReviews: number
+    courseReview: number
 }
 
 type GetCourses = {
@@ -30,6 +33,7 @@ export const getCourses = async ({
             },
             include: {
                 category: true,
+                reviews: true,
                 chapters: {
                     where: {
                         isPublished: true
@@ -37,11 +41,12 @@ export const getCourses = async ({
                     select: {
                         id: true
                     }
-                }, purchases: {
+                },
+                purchases: {
                     where: {
                         userId
                     }
-                }
+                },
             },
             orderBy: {
                 createdAt: "desc"
@@ -50,21 +55,28 @@ export const getCourses = async ({
 
         const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
             courses.map(async course => {
+                const totalReviews = course.reviews.length
+                const courseReview = totalReviews === 0 ? 0 : course.reviews.reduce((acc, curr)=> acc+ curr.review, 0) / totalReviews
+
                 if (course.purchases.length === 0) {
                     return {
                         ...course,
-                        progress: null
+                        totalReviews,
+                        courseReview,
+                        progress: null,
                     }
                 }
                 const progressPercentage = await getProgress(userId, course.id)
                 return {
                     ...course,
+                    totalReviews,
+                    courseReview,
                     progress: progressPercentage
                 }
             })
         )
 
-        return coursesWithProgress 
+        return coursesWithProgress
     } catch (error) {
         return []
     }
