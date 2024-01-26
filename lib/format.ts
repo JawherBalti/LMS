@@ -16,17 +16,17 @@ export const formatTotalReviews = (reviews: number) => {
 }
 
 export const formatCourseReview = (courseReview: number) => {
-    return courseReview%1 === 0 ? courseReview : courseReview.toFixed(1)
+    return courseReview % 1 === 0 ? courseReview : courseReview.toFixed(1)
 }
 
-// export const formatDate = (date:Date) => {
-//     const pad = (num: number) => String(num).padStart(2, '0');
+export const formatDate = (date: Date) => {
+    const pad = (num: number) => String(num).padStart(2, '0');
 
-//     const day = pad(date.getDate());
-//     const month = pad(date.getMonth() + 1); // Months are 0-indexed in JavaScript
-//     const year = date.getFullYear();
-//     const hours = pad(date.getHours());
-//     const minutes = pad(date.getMinutes());
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1); // Months are 0-indexed in JavaScript
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
 
-//     return `${day}/${month}/${year} ${hours}:${minutes}`;
-// }
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
