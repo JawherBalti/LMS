@@ -27,7 +27,8 @@ model User {
   role                  UserRole               @default(USER)
   accounts              Account[]
   courses               Course[]
-  // comments              Comment[]
+  comments              Comment[]
+  replies               Reply[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -50,7 +51,7 @@ model Course {
   chapters    Chapter[]
   purchases   Purchase[]
   reviews     Review[]
-  // comments    Comment[]
+  comments    Comment[]
 
   @@index([userId])
 }
@@ -204,13 +205,25 @@ model Review {
   @@unique([userId, courseId])
 }
 
-// model Comment {
-//   id        String   @id @default(cuid())
-//   userId    String
-//   courseId  String
-//   comment   String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
-//   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-// }
+model Comment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replies   Reply[]
+}
+
+model Reply {
+  id        String   @id @default(cuid())
+  userId    String
+  commentId String
+  reply     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
