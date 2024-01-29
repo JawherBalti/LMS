@@ -84,16 +84,29 @@ model Chapter {
   isPublished Boolean @default(false)
   isFree      Boolean @default(false)
 
-  muxData      MuxData?
-  userProgress UserProgress[]
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  muxData            MuxData?
+  userProgress       UserProgress[]
+  chapterAttachments ChapterAttachment[]
+  courseId           String
+  course             Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([courseId])
+}
+
+model ChapterAttachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String   @db.Text
+  chapterId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@index([chapterId])
 }
 
 model MuxData {
