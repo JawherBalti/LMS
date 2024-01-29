@@ -1,4 +1,4 @@
-import { Attachment, Chapter, MuxData } from "@prisma/client"
+import { Chapter, ChapterAttachment, MuxData } from "@prisma/client"
 import { db } from "../lib/db"
 
 interface GetChapterProps {
@@ -41,13 +41,13 @@ export const getChapter = async ({
         if (!chapter || !course) throw new Error("Chapter or course not found")
 
         let muxData: MuxData | null = null
-        let attachments: Attachment[] = []
+        let chapterAttachments: ChapterAttachment[] = []
         let nextChapter: Chapter | null = null
 
         if (purchase) {
-            attachments = await db.attachment.findMany({
+            chapterAttachments = await db.chapterAttachment.findMany({
                 where: {
-                    courseId
+                    chapterId
                 }
             })
         }
@@ -86,7 +86,7 @@ export const getChapter = async ({
             chapter,
             course,
             muxData,
-            attachments,
+            chapterAttachments,
             nextChapter,
             userProgress,
             purchase,
@@ -96,7 +96,7 @@ export const getChapter = async ({
             chapter: null,
             course: null,
             muxData: null,
-            attachments: [],
+            chapterAttachments: [],
             nextChapter: null,
             userProgress: null,
             purchase: null,
