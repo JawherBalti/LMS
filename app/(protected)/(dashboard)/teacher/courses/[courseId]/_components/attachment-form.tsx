@@ -52,7 +52,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course attachment
+        Course attachments
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancel</>}
           {!isEditing && (
