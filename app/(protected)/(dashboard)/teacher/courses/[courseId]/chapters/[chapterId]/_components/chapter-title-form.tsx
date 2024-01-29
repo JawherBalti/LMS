@@ -67,7 +67,7 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
           )}
         </Button>
       </div>
-      {!isEditing && <p className="text-sm mt-2">{initialData.title}</p>}
+      {!isEditing && <p className="text-sm mt-2 break-words">{initialData.title}</p>}
       {isEditing && (
         <Form {...form}>
           <form

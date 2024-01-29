@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+
 export async function POST(req: Request) {
     try {
         const user = await currentUser()
@@ -15,9 +16,6 @@ export async function POST(req: Request) {
             }
         })
 
-        console.log(purchase);
-
-
         if (purchase) return new NextResponse("Already purchased", { status: 400 })
 
         const newPurchase = await db.purchase.create({
@@ -26,7 +24,6 @@ export async function POST(req: Request) {
                 userId: user.id
             },
         })
-        console.log(newPurchase);
 
         return NextResponse.json(newPurchase)
 
