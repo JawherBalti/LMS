@@ -22,7 +22,7 @@ const ChpaterIdPage = async ({
     chapter,
     course,
     muxData,
-    attachments,
+    chapterAttachments,
     nextChapter,
     userProgress,
     purchase,
@@ -62,7 +62,9 @@ const ChpaterIdPage = async ({
         </div>
         <div className="full">
           <div className="p-4 flex flex-col md:flex-row items-center justify-between w-full">
-            <h2 className="text-2xl font-semibold mb-2 break-words line-clamp-1 w-full">{chapter.title}</h2>
+            <h2 className="text-2xl font-semibold mb-2 break-words line-clamp-1 w-full">
+              {chapter.title}
+            </h2>
             {purchase ? (
               <CourseProgressButton
                 chapterId={params.chapterId}
@@ -79,19 +81,19 @@ const ChpaterIdPage = async ({
           </div>
           <Separator />
           <CardTitle className="p-4 pl-0">Course description:</CardTitle>
-            <p className="break-words pl-4 pb-4">{course.description}</p>
+          <p className="break-words pl-4 pb-4">{course.description}</p>
           <Separator />
           <CardTitle className="p-4 pl-0">Chapter description:</CardTitle>
-            <Preview value={chapter.description!} />
+          <Preview value={chapter.description!} />
           <Separator />
-          <CardTitle className="p-4 pl-0">Attachments:</CardTitle>
-          {attachments.length ? (
+          <CardTitle className="p-4 pl-0">Chapter attachments:</CardTitle>
+          {chapterAttachments.length ? (
             <>
               <div className="p-4">
-                {attachments.map((att) => (
+                {chapterAttachments.map((att) => (
                   <a
                     className="flex items-center p-3 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
-                    target="_black"
+                    target="_blank"
                     href={att.url}
                     key={att.id}
                   >
@@ -102,8 +104,9 @@ const ChpaterIdPage = async ({
               </div>
             </>
           ) : (
-            <span className="pl-4">No attachments</span>
+            <span className="pl-4">Chapter has no attachments or you did not buy the course</span>
           )}
+
         </div>
       </div>
     </div>
