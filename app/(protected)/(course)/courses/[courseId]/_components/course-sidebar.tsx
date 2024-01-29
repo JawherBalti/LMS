@@ -1,17 +1,19 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+import { Attachment, Chapter, Course, UserProgress } from "@prisma/client";
 import { redirect } from "next/navigation";
 import CourseSidebarItem from "./course-sidebar-item";
 import CourseProgress from "@/components/course-progress";
 import ReviewCourse from "./review-course";
 import DiscussionButton from "./discussion-button";
+import CourseAttachments from "./course-attachments";
 
 interface CourseSidebarProps {
   course: Course & {
     chapters: (Chapter & {
       userProgress: UserProgress[] | null;
     })[];
+    attachments: Attachment[];
   };
   progressCount: number;
 }
@@ -52,7 +54,9 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
             isLocked={!chapter.isFree && !purchase}
           />
         ))}
-        <DiscussionButton courseId={course.id}/>
+        <CourseAttachments purchase={purchase!} course={course} />
+
+        <DiscussionButton courseId={course.id} />
       </div>
     </div>
   );
