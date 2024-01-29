@@ -35,6 +35,7 @@ const CourseLayout = async ({
           position: "asc",
         },
       },
+      attachments: true
     },
   });
 
