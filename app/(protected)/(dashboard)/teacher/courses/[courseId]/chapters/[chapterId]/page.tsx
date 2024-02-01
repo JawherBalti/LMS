@@ -1,17 +1,15 @@
 import { IconBadge } from "@/components/icon-badge";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ArrowLeft, Eye, File, LayoutDashboard, Video } from "lucide-react";
+import { ArrowLeft, Eye, LayoutDashboard, ListChecks } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import ChapterTitleForm from "./_components/chapter-title-form";
-import ChapterDescriptionForm from "./_components/chapter-description-form";
 import ChapterAccessForm from "./_components/chapter-access-form";
-import ChapterVideoForm from "./_components/chapter-video-form";
 import Banner from "@/components/banner";
 import ChapterActions from "./_components/chapter-actions";
-import ChapterAttachmentForm from "./_components/chatper-attachment-form";
+import SubChaptersForm from "./_components/sub-chapters-form";
 
 const ChapterIdPage = async ({
   params,
@@ -28,16 +26,30 @@ const ChapterIdPage = async ({
       courseId: params.courseId,
     },
     include: {
-      muxData: true,
-      chapterAttachments: true
+      subChapters: {
+        include: {
+          muxData: true,
+          chapterAttachments: true,
+        },
+        orderBy: {
+          position: "asc",
+        },
+      },
     },
   });
 
   if (!chapter) {
     return redirect("/");
   }
+  const subChaptersCompleted = chapter.subChapters.every(
+    (subChapter) =>
+      subChapter.muxData &&
+      subChapter.title &&
+      subChapter.description &&
+      subChapter.chapterAttachments.length !== 0
+  );
 
-  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
+  const requiredFields = [chapter.title, chapter.subChapters.length > 0 && subChaptersCompleted];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length; //return values !== null
@@ -66,7 +78,7 @@ const ChapterIdPage = async ({
             </Link>
             <div className="flex items-center justify-between w-full">
               <div className="flex flex-col gap-y-2">
-                <h1 className="text-2xl font-medium">Course setup</h1>
+                <h1 className="text-2xl font-medium">Chapter setup</h1>
                 <span className="text-sm text-slate-700 dark:text-foreground">
                   Complete all fields {completionText}
                 </span>
@@ -93,11 +105,6 @@ const ChapterIdPage = async ({
                 courseId={params.courseId}
                 chapterId={params.chapterId}
               />
-              <ChapterDescriptionForm
-                initialData={chapter}
-                courseId={params.courseId}
-                chapterId={params.chapterId}
-              />
             </div>
             <div>
               <div className="flex items-center gap-x-2">
@@ -112,24 +119,18 @@ const ChapterIdPage = async ({
             </div>
           </div>
           <div className="space-y-4">
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={Video} />
-              <h2 className=" text-xl">Add a video</h2>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={ListChecks} />
+                <h2 className="text-xl">Chapter sub-chapters</h2>
+              </div>
+
+              <SubChaptersForm
+                initialData={chapter}
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+              />
             </div>
-            <ChapterVideoForm
-              initialData={chapter}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            />
-            <div className="flex items-center gap-x-2">
-              <IconBadge icon={File} />
-              <h2 className="text-xl">Resources & Attachments</h2>
-            </div>
-            <ChapterAttachmentForm
-              initialData={chapter}
-              courseId={params.courseId}
-              chapterId={params.chapterId}
-            />
           </div>
         </div>
       </div>
