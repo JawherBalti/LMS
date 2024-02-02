@@ -23,13 +23,18 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
             }
         })
 
-        const muxData = await db.muxData.findUnique({
+        const subChapters = await db.subChapter.findMany({
             where: {
                 chapterId: params.chapterId
+            },
+            include: {
+                muxData: true
             }
         })
 
-        if (!chapter || !muxData || !chapter.title || !chapter.description || !chapter.videoUrl) {
+        const hasMuxData = subChapters.every(subChapter => subChapter.muxData!== null)
+
+        if (!chapter || !hasMuxData || !chapter.title) {
             return new NextResponse("Missing required fields", { status: 400 })
         }
 
