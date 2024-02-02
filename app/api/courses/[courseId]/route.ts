@@ -1,4 +1,3 @@
-import { MuxData } from '@prisma/client';
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Mux from "@mux/mux-node";
@@ -26,33 +25,35 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
             include: {
                 chapters: {
                     include: {
-                        muxData: true
+                        subChapters: {
+                            include: {
+                                muxData: true,
+                                chapterAttachments: true
+                            }
+                        }
                     }
                 },
-                attachments: {
-                    select: {
-                        url: true
-                    }
-                }
             }
         })
         if (!course) return new NextResponse("Not found", { status: 404 })
 
         for (const chapter of course.chapters) {
-            if (chapter.muxData?.assetId) {
-                await Video.Assets.del(chapter.muxData.assetId)
+            for (const subChapter of chapter.subChapters) {
+                if (subChapter.videoUrl) {
+                    const videoKey = subChapter.videoUrl.split("/f/")[1]
+                    await utApi.deleteFiles(videoKey)
+                }
+                if (subChapter.muxData?.assetId) {
+                    await Video.Assets.del(subChapter.muxData.assetId)
+                }
+                for(const attachment of subChapter.chapterAttachments) {
+                    if(attachment.url) {
+                        const fileKey = attachment.url.split("/f/")[1]
+                        await utApi.deleteFiles(fileKey)
+                    }
+                }
             }
         }
-
-        const attachmentKeys = []
-        for (const attachment of course.attachments) {
-            if (attachment.url) {
-                const attachmentKey = attachment.url.split("/f/")[1]
-                attachmentKeys.push(attachmentKey)
-            }
-        }
-
-        if (attachmentKeys.length > 0) await utApi.deleteFiles(attachmentKeys)
 
         if (course.imageUrl) {
             const imageKey = course.imageUrl.split("/f/")[1] as string | string[]
