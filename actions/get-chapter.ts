@@ -1,14 +1,16 @@
-import { Chapter, ChapterAttachment, MuxData } from "@prisma/client"
+import { Chapter, ChapterAttachment, MuxData, SubChapter } from "@prisma/client"
 import { db } from "../lib/db"
 
 interface GetChapterProps {
     userId: string
     courseId: string
     chapterId: string
+    subChapterId: string
+
 }
 
 export const getChapter = async ({
-    userId, courseId, chapterId
+    userId, courseId, chapterId, subChapterId
 }: GetChapterProps) => {
     try {
         const purchase = await db.purchase.findUnique({
@@ -38,16 +40,24 @@ export const getChapter = async ({
             }
         })
 
-        if (!chapter || !course) throw new Error("Chapter or course not found")
+        const subChapter = await db.subChapter.findUnique({
+            where: {
+                id: subChapterId,
+                chapterId
+            }
+        })
+
+        if (!subChapter || !chapter || !course) throw new Error("Chapter or course not found")
 
         let muxData: MuxData | null = null
         let chapterAttachments: ChapterAttachment[] = []
         let nextChapter: Chapter | null = null
+        let nextSubChapter: SubChapter | null = null
 
         if (purchase) {
             chapterAttachments = await db.chapterAttachment.findMany({
                 where: {
-                    chapterId
+                    subChapterId
                 }
             })
         }
@@ -55,16 +65,28 @@ export const getChapter = async ({
         if (chapter.isFree || purchase) {
             muxData = await db.muxData.findUnique({
                 where: {
-                    chapterId
+                    subChapterId
                 }
             })
 
-            nextChapter = await db.chapter.findFirst({
+            // nextChapter = await db.chapter.findFirst({
+            //     where: {
+            //         courseId,
+            //         isPublished: true,
+            //         position: {
+            //             gt: chapter?.position
+            //         }
+            //     },
+            //     orderBy: {
+            //         position: "asc"
+            //     }
+            // })
+
+            nextSubChapter = await db.subChapter.findFirst({
                 where: {
-                    courseId,
-                    isPublished: true,
+                    chapterId,
                     position: {
-                        gt: chapter?.position
+                        gt: subChapter?.position
                     }
                 },
                 orderBy: {
@@ -75,29 +97,33 @@ export const getChapter = async ({
 
         const userProgress = await db.userProgress.findUnique({
             where: {
-                userId_chapterId: {
+                userId_subChapterId: {
                     userId,
-                    chapterId
+                    subChapterId
                 }
             }
         })
 
         return {
+            subChapter,
             chapter,
             course,
             muxData,
             chapterAttachments,
             nextChapter,
+            nextSubChapter,
             userProgress,
             purchase,
         }
     } catch (error) {
         return {
+            subChapter: null,
             chapter: null,
             course: null,
             muxData: null,
             chapterAttachments: [],
             nextChapter: null,
+            nextSubChapter: null,
             userProgress: null,
             purchase: null,
         }
