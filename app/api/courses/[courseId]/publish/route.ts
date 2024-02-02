@@ -13,11 +13,7 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
                 userId: user.id
             },
             include: {
-                chapters: {
-                    include: {
-                        muxData: true
-                    }
-                }
+                chapters: true
             }
         })
 
