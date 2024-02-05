@@ -32,8 +32,11 @@ const CourseLayout = async ({
                   userId: user.id,
                 },
               },
+            },
+            orderBy: {
+              position: "asc"
             }
-          }
+          },
         },
         orderBy: {
           position: "asc",
