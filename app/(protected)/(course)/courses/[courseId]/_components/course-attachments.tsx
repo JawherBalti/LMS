@@ -4,7 +4,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { File, Folder } from "lucide-react";
+import { ChevronDown, File, Folder } from "lucide-react";
 import { Attachment, Course, Purchase } from "@prisma/client";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -29,34 +29,42 @@ const CourseAttachments = ({ course, purchase }: CourseAttachmentsProps) => {
           onClick={onClick}
           type="button"
           className={cn(
-            "h-14 max-w-full flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
+            "relative h-14 max-w-full text-slate-500 text-sm font-[500] transition-all hover:text-slate-600 hover:bg-sky-300/20 hover:dark:bg-sky-300/10",
             isOpen &&
-              "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700"
+              "text-slate-700 bg-sky-300/20 dark:bg-sky-300/10 hover:text-slate-700"
           )}
         >
-          <div className="flex items-center gap-x-2 py-4">
+          <div className="flex items-center py-4 gap-x-1 md:gap-x-3">
             <Folder
               size={22}
               className={cn(
-                "text-slate-500 dark:text-foreground",
-                isOpen && "text-slate-700 dark:text-foreground"
+                "text-slate-500 dark:text-foreground ml-2",
+                isOpen && "text-sky-700 dark:text-sky-700"
               )}
             />
             <span
               className={cn(
-                "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-60",
-                isOpen && "text-slate-700 dark:text-foreground"
+                "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-56",
+                isOpen && "text-sky-700 dark:text-sky-700"
               )}
             >
               Course attachments
             </span>
+            <ChevronDown
+              size={22}
+              className={cn(
+                "text-slate-500 dark:text-foreground",
+                isOpen &&
+                  "text-sky-700 dark:text-sky-700"
+              )}
+            />
           </div>
-          <div
+          {/* <div
             className={cn(
-              "ml-auto opacity-0 border-2 border-slate-700 h-full transition-all",
+              "absolute top-0 right-0 opacity-0 border-2 border-sky-700 h-full transition-all",
               isOpen && "opacity-100"
             )}
-          />
+          /> */}
         </button>
       </CollapsibleTrigger>
 
@@ -65,7 +73,7 @@ const CourseAttachments = ({ course, purchase }: CourseAttachmentsProps) => {
           course.attachments.map((att) => (
             <div
               key={att.id}
-              className="flex items-center p-3 w-full bg-secondary border text-sky-700"
+              className="flex items-center p-3 w-full bg-sky-300/10 dark:bg-sky-300/5 border-b text-sky-700"
             >
               <File className="h-4 w-4 mr-2 flex-shrink-0" />
               <a
