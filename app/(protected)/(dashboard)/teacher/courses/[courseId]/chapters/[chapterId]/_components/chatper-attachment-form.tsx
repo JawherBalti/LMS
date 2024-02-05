@@ -1,17 +1,15 @@
 "use client";
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
-import { Attachment, Chapter, ChapterAttachment, Course } from "@prisma/client";
+import { useToast } from "@/components/ui/use-toast";
+import { Chapter, ChapterAttachment } from "@prisma/client";
 import axios from "axios";
-import { File, ImageIcon, Loader2, Pencil, PlusCircle, X } from "lucide-react";
-import Image from "next/image";
+import { AlertTriangle, CheckCircle, File, Loader2, PlusCircle, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface ChapterAttachmentFormProps {
-//   initialData: Chapter & { attachments: Attachment[] };
 initialData: Chapter& {
     chapterAttachments: ChapterAttachment[]
 }
@@ -27,16 +25,29 @@ const ChapterAttachmentForm = ({ initialData, courseId, chapterId }: ChapterAtta
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/chapterAttachments`, values);
-      toast.success("Chapter updated");
+      toast({
+        title: "Chapter created",
+        description: "You have created a chapter",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
@@ -44,10 +55,21 @@ const ChapterAttachmentForm = ({ initialData, courseId, chapterId }: ChapterAtta
     try {
       setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}/chapterAttachments/${id}`);
-      toast.success("Attachment deleted");
+      toast({
+        title: "Attachment added",
+        description: "You have added an attachment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setDeletingId(null);
     }

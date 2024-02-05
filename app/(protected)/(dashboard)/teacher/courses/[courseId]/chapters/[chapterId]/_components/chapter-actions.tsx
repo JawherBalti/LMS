@@ -2,11 +2,11 @@
 
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { AlertTriangle, CheckCircle, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 interface ChapterActionsProps {
   disabled: boolean;
@@ -21,6 +21,7 @@ const ChapterActions = ({
   isPublished,
 }: ChapterActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const router = useRouter();
 
@@ -28,11 +29,22 @@ const ChapterActions = ({
     try {
       setIsLoading(true);
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
-      toast.success("Chapter deleted");
+      toast({
+        title: "Chapter deleted",
+        description: "You have deleted a chapter",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.push(`/teacher/courses/${courseId}`);
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -45,16 +57,34 @@ const ChapterActions = ({
         await axios.patch(
           `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
         );
-        toast.success("Chapter unpublished")
+        toast({
+          title: "Chapter published",
+          description: "You have published a chapter",
+          action: (
+            <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+          ),
+          className: "border-black dark:border-white",
+        });
       } else {
         await axios.patch(
-            `/api/courses/${courseId}/chapters/${chapterId}/publish`
-          );
-          toast.success("Chapter published")
+          `/api/courses/${courseId}/chapters/${chapterId}/publish`
+        );
+        toast({
+          title: "Chapter unpublished",
+          description: "You have unpublished a chapter",
+          action: (
+            <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+          ),
+          className: "border-black dark:border-white",
+        });
       }
-      router.refresh()
+      router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsLoading(false);
     }

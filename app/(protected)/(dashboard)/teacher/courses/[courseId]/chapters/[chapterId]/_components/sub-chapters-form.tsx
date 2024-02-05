@@ -12,13 +12,13 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Chapter, ChapterAttachment, Course, MuxData, SubChapter } from "@prisma/client";
 import axios from "axios";
-import { Loader2, PlusCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Loader2, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 import SubChaptersList from "./sub-chapters-list";
+import { useToast } from "@/components/ui/use-toast";
 
 type SubChaptersWithData = SubChapter & {
     muxData: MuxData | null,
@@ -47,6 +47,8 @@ const SubChaptersForm = ({ initialData, courseId, chapterId }: SubChaptersFormPr
   const [isUpdating, setIsUpdating] = useState(false);
 
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleCreate = () => setIsCreating((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -61,11 +63,22 @@ const SubChaptersForm = ({ initialData, courseId, chapterId }: SubChaptersFormPr
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/subChapters`, values);
-      toast.success("Sub-chapter created");
+      toast({
+        title: "Sub-chapter created",
+        description: "You have created a sub-chapter",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleCreate();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
@@ -75,10 +88,21 @@ const SubChaptersForm = ({ initialData, courseId, chapterId }: SubChaptersFormPr
       await axios.put(`/api/courses/${courseId}/chapters/${chapterId}/subChapters/reorder`, {
         list: updateData,
       });
-      toast.success("Sub-chapters reordered");
+      toast({
+        title: "Sub-chapter reordered",
+        description: "You have reordered a sub-chapter",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsUpdating(false);
     }

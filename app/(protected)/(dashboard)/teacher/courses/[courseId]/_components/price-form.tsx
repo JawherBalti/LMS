@@ -9,31 +9,33 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Course } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface PriceFormProps {
   initialData: Course;
   courseId: string;
+  isCourseFree: boolean
 }
 
 const formSchema = z.object({
   price: z.coerce.number(),
 });
 
-const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
+const PriceForm = ({ initialData, courseId, isCourseFree }: PriceFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,11 +50,36 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+      if (values.price > 0 && isCourseFree) {
+        toast({
+          title: "Course chapters are free but the course has a price",
+          description:
+            "Please consider changing the price to 0 or make one chapter not free.",
+          action: (
+            <AlertTriangle className="text-red-600 dark:text-red-600" />
+          ),
+          className: "border-black dark:border-white",
+        });
+      } else {
+
+      toast({
+        title: "Course updated",
+        description: "You have updated the price",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
+      }
+
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

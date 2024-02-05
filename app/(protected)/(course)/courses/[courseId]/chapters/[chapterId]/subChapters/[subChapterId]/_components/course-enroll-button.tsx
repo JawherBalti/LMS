@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { formatPrice } from "@/lib/format";
 import axios from "axios";
+import { AlertTriangle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 interface CourseEnrollButtonProps {
   courseId: string;
@@ -13,6 +14,8 @@ interface CourseEnrollButtonProps {
 }
 const CourseEnrollButton = ({ courseId, price }: CourseEnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast()
+
   const router = useRouter();
 
   const onClick = async () => {
@@ -26,7 +29,11 @@ const CourseEnrollButton = ({ courseId, price }: CourseEnrollButtonProps) => {
         window.location.assign(response.data.url);
       }
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600"/>,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsLoading(false);
     }

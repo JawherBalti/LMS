@@ -1,13 +1,19 @@
 "use client";
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { Attachment, Course } from "@prisma/client";
 import axios from "axios";
-import { File, ImageIcon, Loader2, Pencil, PlusCircle, X } from "lucide-react";
-import Image from "next/image";
+import {
+  AlertTriangle,
+  CheckCircle,
+  File,
+  Loader2,
+  PlusCircle,
+  X,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface AttachmentFormProps {
@@ -23,16 +29,29 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, values);
-      toast.success("Course updated");
+      toast({
+        title: "Attachment created",
+        description: "You have updated this course",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
@@ -40,10 +59,21 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
     try {
       setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success("Attachment deleted");
+      toast({
+        title: "Attachment deleted",
+        description: "You have deleted an attachment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setDeletingId(null);
     }

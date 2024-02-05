@@ -8,37 +8,43 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Course } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface CategoryFormProps {
-  initialData: Course
+  initialData: Course;
   courseId: string;
-  options: {label:string, value:string}[]
+  options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
   categoryId: z.string().min(1),
 });
 
-const CategoryForm = ({ initialData, courseId, options }: CategoryFormProps) => {
+const CategoryForm = ({
+  initialData,
+  courseId,
+  options,
+}: CategoryFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || ""
-    }
+      categoryId: initialData?.categoryId || "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -46,15 +52,28 @@ const CategoryForm = ({ initialData, courseId, options }: CategoryFormProps) => 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+      toast({
+        title: "Course updated",
+        description: "You have assigned a category to the course",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
-  const selectedOption = options.find(op => op.value === initialData.categoryId)
+  const selectedOption = options.find(
+    (op) => op.value === initialData.categoryId
+  );
 
   return (
     <div className="mt-6 border bg-slate-100 dark:bg-background rounded-md p-4">
@@ -71,9 +90,16 @@ const CategoryForm = ({ initialData, courseId, options }: CategoryFormProps) => 
           )}
         </Button>
       </div>
-      {!isEditing && <p className={cn("text-sm mt-2", !initialData.categoryId && "text-slate-500 italic")}>
-        {selectedOption?.label || 'There is no category'}
-    </p>}
+      {!isEditing && (
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.categoryId && "text-slate-500 italic"
+          )}
+        >
+          {selectedOption?.label || "There is no category"}
+        </p>
+      )}
       {isEditing && (
         <Form {...form}>
           <form
@@ -86,10 +112,7 @@ const CategoryForm = ({ initialData, courseId, options }: CategoryFormProps) => 
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox
-                        options={options}
-                        {...field}
-                    />
+                    <Combobox options={options} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

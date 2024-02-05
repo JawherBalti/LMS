@@ -3,12 +3,12 @@ import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
 import { MuxData, SubChapter } from "@prisma/client";
 import axios from "axios";
-import { Pencil, PlusCircle, Video } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil, PlusCircle, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import * as z from "zod";
 import MuxPlayer from "@mux/mux-player-react";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ChapterVideoFormProps {
   initialData: SubChapter & { muxData?: MuxData | null };
@@ -29,6 +29,7 @@ const SubChapterVideoForm = ({
 }: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const {toast} = useToast()
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -37,11 +38,22 @@ const SubChapterVideoForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}/subChapters/${subChapterId}`,
         values
       );
-      toast.success("Sub-chapter updated");
+      toast({
+        title: "Sub-chapter updated",
+        description: "You have added a video",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

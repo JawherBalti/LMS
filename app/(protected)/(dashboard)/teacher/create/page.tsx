@@ -17,7 +17,8 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import axios from "axios";
-import toast from "react-hot-toast";
+import { AlertTriangle, CheckCircle } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -27,6 +28,7 @@ const formSchema = z.object({
 
 const CreatePage = () => {
   const router = useRouter();
+  const {toast} = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,9 +43,20 @@ const CreatePage = () => {
     try {
       const response = await axios.post("/api/courses", values);
       router.push(`/teacher/courses/${response.data.id}`)
-      toast.success("Course created")
+      toast({
+        title: "Course created",
+        description: "You have created a course",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

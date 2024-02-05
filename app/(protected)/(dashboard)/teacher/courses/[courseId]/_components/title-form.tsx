@@ -8,13 +8,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface TitleFormProps {
@@ -33,6 +33,8 @@ const formSchema = z.object({
 const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,11 +47,22 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+      toast({
+        title: "Course updated",
+        description: "You have updated the title",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

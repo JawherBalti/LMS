@@ -1,17 +1,24 @@
 "use client";
 
 import { formatDate } from "@/lib/format";
-import { Loader2, Reply as ReplyIcon, TextQuote, X } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Loader2,
+  Reply as ReplyIcon,
+  TextQuote,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Comment, Reply } from "@prisma/client";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 import { useCallback, useEffect, useState } from "react";
 import ReplyForm from "./reply-form";
 import Replies from "./replies";
+import { useToast } from "@/components/ui/use-toast";
 
 type CommentsListType = Comment & {
   user: {
@@ -42,6 +49,8 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
   const [repliesCount, setRepliesCount] = useState(0);
   const [isReplyClicked, setIsReplyClicked] = useState(false);
   const [isShowRepliesClicked, setIsShowRepliesClicked] = useState(false);
+  const { toast } = useToast();
+
   const params = useParams();
   const router = useRouter();
 
@@ -54,11 +63,15 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
       setReplies(response.data.replies);
       setRepliesCount(response.data.repliesCount);
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsFetching(false);
     }
-  }, [comment.id, params.courseId]);
+  }, [comment.id, params.courseId, toast]);
 
   useEffect(() => {
     getReplies();
@@ -71,11 +84,22 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
       await axios.delete(
         `/api/courses/${params.courseId}/comments/${commentId}/replies/${replyId}`
       );
-      toast.success("Deleted");
+      toast({
+        title: "Reply deleted",
+        description: "You have deleted this reply",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       setReplies(replies.filter((reply) => reply.id !== replyId));
       setRepliesCount((prev) => prev - 1);
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsDeletingReply(false);
     }
@@ -88,10 +112,21 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
       await axios.delete(
         `/api/courses/${params.courseId}/comments/${commentId}`
       );
-      toast.success("Deleted");
+      toast({
+        title: "Comment deleted",
+        description: "You have deleted this comment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -124,11 +159,7 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
         <p className="p-2 pl-4">{comment.comment}</p>
         <div>
           {!isShowRepliesClicked ? (
-            <Button
-              onClick={showReplies}
-              size="sm"
-              variant="ghost"
-            >
+            <Button onClick={showReplies} size="sm" variant="ghost">
               {isFetching ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
               ) : (

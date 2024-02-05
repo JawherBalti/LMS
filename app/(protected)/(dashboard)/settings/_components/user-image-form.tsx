@@ -1,17 +1,17 @@
 "use client";
 
 import { FileUpload } from "@/components/file-upload";
-import { Avatar, AvatarFallback} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { UserRole } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { FaRegUser } from "react-icons/fa";
 import * as z from "zod";
 
@@ -33,26 +33,36 @@ const UserImageForm = ({ initialData }: UserImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const { update } = useSession();
+  const { toast } = useToast();
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/profile`, values);
-      toast.success("Profile picture updated");
+      toast({
+        title: "Profile picture updated",
+        description: "You have updated your profile",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       update();
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
   return (
     <div className="mt-6 borde rounded-md">
-      <div className="text-sm font-medium">
-        Profile picture
-      </div>
+      <div className="text-sm font-medium">Profile picture</div>
       {!isEditing &&
         (!initialData.image ? (
           <div className="mt-4 flex flex-col justify-center items-center w-44">

@@ -9,13 +9,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Reply } from "@prisma/client";
 import axios from "axios";
+import { AlertTriangle, CheckCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 type RepliesListType = Reply & {
@@ -42,6 +43,8 @@ const ReplyForm = ({
   setReplies,
   setRepliesCount,
 }: ReplyFormProps) => {
+  const { toast } = useToast();
+
   const user = useCurrentUser();
   const params = useParams();
 
@@ -75,11 +78,22 @@ const ReplyForm = ({
         },
         ...prev,
       ]);
-      setRepliesCount(prev => prev + 1) 
-      toast.success("Reply added");
+      setRepliesCount((prev) => prev + 1);
+      toast({
+        title: "Reply created",
+        description: "You have replied to a comment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       form.reset();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

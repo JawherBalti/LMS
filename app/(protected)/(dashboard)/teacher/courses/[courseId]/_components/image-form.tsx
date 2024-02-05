@@ -1,13 +1,13 @@
 "use client";
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { Course } from "@prisma/client";
 import axios from "axios";
-import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, ImageIcon, Pencil, PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface ImageFormProps {
@@ -24,16 +24,29 @@ const formSchema = z.object({
 const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+      toast({
+        title: "Course updated",
+        description: "You have updated the image",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

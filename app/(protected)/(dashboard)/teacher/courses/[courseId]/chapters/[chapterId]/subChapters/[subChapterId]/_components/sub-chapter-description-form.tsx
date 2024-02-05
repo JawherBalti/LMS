@@ -9,15 +9,15 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubChapter } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface ChapterDescriptionFormProps {
@@ -39,6 +39,8 @@ const SubChapterDescriptionForm = ({
 }: ChapterDescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,11 +58,22 @@ const SubChapterDescriptionForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}/subChapters/${subChapterId}`,
         values
       );
-      toast.success("Sub-chapter updated");
+      toast({
+        title: "Sub-chapter updated",
+        description: "You have updated the description",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 

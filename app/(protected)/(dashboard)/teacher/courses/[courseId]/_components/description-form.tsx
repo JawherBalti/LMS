@@ -8,19 +8,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Course } from "@prisma/client";
 import axios from "axios";
-import { Pencil } from "lucide-react";
+import { AlertTriangle, CheckCircle, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface DescriptionFormProps {
-  initialData: Course
+  initialData: Course;
   courseId: string;
 }
 
@@ -33,13 +33,15 @@ const formSchema = z.object({
 const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      description: initialData?.description || ""
-    }
+      description: initialData?.description || "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -47,11 +49,23 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course updated");
+
+      toast({
+        title: "Course updated",
+        description: "You have updated the description",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
@@ -70,9 +84,16 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           )}
         </Button>
       </div>
-      {!isEditing && <p className={cn("text-sm mt-2 break-words", !initialData.description && "text-slate-500 italic")}>
-        {initialData.description || 'There is no description'}
-    </p>}
+      {!isEditing && (
+        <p
+          className={cn(
+            "text-sm mt-2 break-words",
+            !initialData.description && "text-slate-500 italic"
+          )}
+        >
+          {initialData.description || "There is no description"}
+        </p>
+      )}
       {isEditing && (
         <Form {...form}>
           <form

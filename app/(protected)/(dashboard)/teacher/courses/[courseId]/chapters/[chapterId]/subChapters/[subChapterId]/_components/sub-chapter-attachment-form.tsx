@@ -1,12 +1,12 @@
 "use client";
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import { ChapterAttachment, SubChapter } from "@prisma/client";
 import axios from "axios";
-import { File, Loader2, PlusCircle, X } from "lucide-react";
+import { AlertTriangle, CheckCircle, File, Loader2, PlusCircle, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import * as z from "zod";
 
 interface ChapterAttachmentFormProps {
@@ -26,16 +26,29 @@ const SubChapterAttachmentForm = ({ initialData, courseId, chapterId, subChapter
   const [isEditing, setIsEditing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
+  const { toast } = useToast();
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters/${chapterId}/subChapters/${subChapterId}/subChapterAttachments`, values);
-      toast.success("Attachment added");
+      toast({
+        title: "Attachment added",
+        description: "You have added an attachment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     }
   };
 
@@ -43,10 +56,21 @@ const SubChapterAttachmentForm = ({ initialData, courseId, chapterId, subChapter
     try {
       setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}/subChapters/${subChapterId}/subChapterAttachments/${id}`);
-      toast.success("Attachment deleted");
+      toast({
+        title: "Attachment deleted",
+        description: "You have deleted an attachment",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
       router.refresh();
     } catch {
-      toast.error("Something went wrong");
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
     } finally {
       setDeletingId(null);
     }
