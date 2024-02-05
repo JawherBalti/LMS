@@ -1,23 +1,17 @@
 "use client";
 
-import React from "react";
-import {
-  DashboardIcon,
-  RocketIcon,
-  FileTextIcon,
-  BarChartIcon,
-} from "@radix-ui/react-icons";
 import SidebarItem from "./sidebar-item";
 import { usePathname } from "next/navigation";
+import { BarChart, Compass, LayoutDashboard, LayoutList } from "lucide-react";
 
 const guestRoutes = [
   {
-    icon: DashboardIcon,
+    icon: LayoutDashboard,
     label: "Dashboard",
     href: "/dashboard",
   },
   {
-    icon: RocketIcon,
+    icon: Compass,
     label: "Browse",
     href: "/search",
   },
@@ -25,12 +19,12 @@ const guestRoutes = [
 
 const teacherRoutes = [
   {
-    icon: FileTextIcon,
+    icon: LayoutList,
     label: "Courses",
     href: "/teacher/courses",
   },
   {
-    icon: BarChartIcon,
+    icon: BarChart,
     label: "Analytics",
     href: "/teacher/analytics",
   },

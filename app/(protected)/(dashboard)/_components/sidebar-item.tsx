@@ -2,10 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
+import { LucideIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 interface SidebarItemProps {
-  icon: React.ForwardRefExoticComponent<
+  icon: LucideIcon |React.ForwardRefExoticComponent<
     IconProps & React.RefAttributes<SVGSVGElement>
   >;
   label: string;
