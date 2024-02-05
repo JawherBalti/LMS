@@ -31,7 +31,6 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
         if (attachmentKey) {
             await utApi.deleteFiles(attachmentKey)
         }
-        console.log(attachmentKey)
 
         return NextResponse.json(attachment)
     } catch (error) {

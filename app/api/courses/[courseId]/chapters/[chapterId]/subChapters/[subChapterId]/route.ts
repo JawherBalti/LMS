@@ -75,29 +75,10 @@ export async function DELETE(req: Request, { params }: { params: { courseId: str
             }
         })
 
-        // const publishedChaptersInCourse = await db.chapter.findMany({
-        //     where: {
-        //         courseId: params.courseId,
-        //         isPublished: true
-        //     }
-        // })
-
-        // if (!publishedChaptersInCourse.length) {
-        //     await db.course.update({
-        //         where: {
-        //             id: params.courseId
-        //         },
-        //         data: {
-        //             isPublished: false
-        //         }
-        //     })
-        // }
-
         return NextResponse.json(deletedSubChapter)
 
     } catch (error) {
         return new NextResponse("Internal Error : " + error, { status: 500 })
-
     }
 }
 
@@ -172,7 +153,6 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
         }
 
         return NextResponse.json(subChapter)
-
     } catch (error) {
         return new NextResponse("Internal Error", { status: 500 })
     }
