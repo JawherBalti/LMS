@@ -65,7 +65,7 @@ export const CourseCard = ({
           ) : price === 0 ? (
             <Badge className="w-12">Free</Badge>
           ) : (
-            <p className="text-md md:text-sm font-medium text-slate-700 dark:text-secondary">
+            <p className="text-md md:text-sm font-medium text-slate-500">
               {formatPrice(price)}
             </p>
           )}
