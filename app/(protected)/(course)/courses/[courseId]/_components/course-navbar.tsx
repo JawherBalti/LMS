@@ -1,13 +1,22 @@
 import { NavbarRoutes } from "@/components/navbar-routes";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+import { Attachment, Chapter, Course, SubChapter, UserProgress } from "@prisma/client";
 import CourseMobileSidebar from "./course-mobile-sidebar";
 
+type SubChapterWithUserProgress = SubChapter & {
+  userProgress: UserProgress[]
+}
+
+type ChapterWithSubChapters = Chapter & {
+  subChapters: SubChapterWithUserProgress[]
+}
+
+type CourseWithChaptersAndAttachments = Course & {
+  chapters: ChapterWithSubChapters[]
+  attachments: Attachment[]
+}
+
 interface CourseNavbarProps {
-  course: Course & {
-    chapters: (Chapter & {
-      userProgress: UserProgress[] | null;
-    })[];
-  };
+  course: CourseWithChaptersAndAttachments
   progressCount: number;
 }
 
