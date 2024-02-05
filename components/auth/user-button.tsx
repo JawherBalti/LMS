@@ -35,7 +35,7 @@ export const UserButton = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="end">
         {user?.role === "ADMIN" && (
-          <UserButtonAction action={() => router.push("/admin")}>
+          <UserButtonAction action={() => router.push("/admin/users")}>
             <DropdownMenuItem>
               <MagicWandIcon className="h-4 w-4 mr-2" />
               Admin
