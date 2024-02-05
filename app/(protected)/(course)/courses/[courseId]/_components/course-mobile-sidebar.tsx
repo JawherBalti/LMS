@@ -1,14 +1,23 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+import { Attachment, Chapter, Course, SubChapter, UserProgress } from "@prisma/client";
 import { Menu } from "lucide-react";
 import CourseSidebar from "./course-sidebar";
 
+type SubChapterWithUserProgress = SubChapter & {
+  userProgress: UserProgress[]
+}
+
+type ChapterWithSubChapters = Chapter & {
+  subChapters: SubChapterWithUserProgress[]
+}
+
+type CourseWithChaptersAndAttachments = Course & {
+  chapters: ChapterWithSubChapters[]
+  attachments: Attachment[]
+}
+
 interface CourseMobileSidebarProps {
-  course: Course & {
-    chapters: (Chapter & {
-      userProgress: UserProgress[] | null;
-    })[];
-  };
+  course: CourseWithChaptersAndAttachments
   progressCount: number;
 }
 

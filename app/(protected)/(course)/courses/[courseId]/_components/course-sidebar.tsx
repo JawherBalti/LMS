@@ -1,6 +1,6 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Attachment, Chapter, Course, UserProgress } from "@prisma/client";
+import { Attachment, Chapter, Course, SubChapter, UserProgress } from "@prisma/client";
 import { redirect } from "next/navigation";
 import CourseSidebarItem from "./course-sidebar-item";
 import CourseProgress from "@/components/course-progress";
@@ -8,13 +8,21 @@ import ReviewCourse from "./review-course";
 import DiscussionButton from "./discussion-button";
 import CourseAttachments from "./course-attachments";
 
+type SubChapterWithUserProgress = SubChapter & {
+  userProgress: UserProgress[]
+}
+
+type ChapterWithSubChapters = Chapter & {
+  subChapters: SubChapterWithUserProgress[]
+}
+
+type CourseWithChaptersAndAttachments = Course & {
+  chapters: ChapterWithSubChapters[]
+  attachments: Attachment[]
+}
+
 interface CourseSidebarProps {
-  course: Course & {
-    chapters: (Chapter & {
-      userProgress: UserProgress[] | null;
-    })[];
-    attachments: Attachment[];
-  };
+  course: CourseWithChaptersAndAttachments
   progressCount: number;
 }
 
@@ -47,11 +55,13 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
         {course.chapters.map((chapter) => (
           <CourseSidebarItem
             key={chapter.id}
-            id={chapter.id}
             label={chapter.title}
-            isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+            isCompleted={!!chapter.subChapters.every(subChapter => subChapter.userProgress?.[0]?.isCompleted)}
+            //isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+            chapterId={chapter.id}
             courseId={course.id}
             isLocked={!chapter.isFree && !purchase}
+            subChapters={chapter.subChapters}
           />
         ))}
         <CourseAttachments purchase={purchase!} course={course} />

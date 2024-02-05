@@ -1,70 +1,104 @@
 "use client";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
-import { CheckCircle, Lock, PlayCircle } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
+import { SubChapter, UserProgress } from "@prisma/client";
+import { AlertCircle, CheckCircle, ChevronDown, Lock } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import SidebarSubChapter from "./sidebar-sub-chapter";
 
+type SubChapterWithUserProgress = SubChapter & {
+  userProgress: UserProgress[];
+};
 interface CourseSidebarItemProps {
   label: string;
-  id: string;
   isCompleted: boolean;
   courseId: string;
+  chapterId: string;
   isLocked: boolean;
+  subChapters: SubChapterWithUserProgress[];
 }
+
 const CourseSidebarItem = ({
   label,
-  id,
   isCompleted,
   courseId,
+  chapterId,
   isLocked,
+  subChapters,
 }: CourseSidebarItemProps) => {
-  const pathname = usePathname();
-  const router = useRouter();
-  const Icon = isLocked ? Lock : isCompleted ? CheckCircle : PlayCircle;
-  const isActive = pathname?.includes(id);
+  const [isOpen, setIsOpen] = useState(false);
+  const params = useParams();
+  const Icon = isLocked ? Lock : isCompleted ? CheckCircle : AlertCircle;
+  const isChapterActive = params.chapterId === chapterId;
 
-  const onClick = () => {
-    router.push(`/courses/${courseId}/chapters/${id}`);
-  };
+  useEffect(() => {
+if(params.chapterId === chapterId) setIsOpen(true)
+  },[params.chapterId, chapterId])
+
   return (
-    <button
-      onClick={onClick}
-      type="button"
-      className={cn(
-        "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
-        isActive &&
-          "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700",
-        isCompleted && " text-emerald-600 hover:text-emerald-600",
-        isCompleted && isActive && "bg-emerald-200/20"
-      )}
-    >
-      <div className="flex items-center gap-x-2 py-4">
-        <Icon
-          size={22}
+    <Collapsible open={isOpen}>
+      <CollapsibleTrigger asChild className="w-full">
+        <button
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+          type="button"
           className={cn(
-            "text-slate-500 dark:text-foreground",
-            isActive && "text-slate-700 dark:text-foreground",
-            isCompleted && "text-emerald-600 dark:text-emerald-600"
-          )}
-        />
-        <span
-          className={cn(
-            "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-60",
-            isActive && "text-slate-700 dark:text-foreground",
-            isCompleted && "text-emerald-600 dark:text-emerald-600"
+            "relative h-14 max-w-full text-slate-500 text-sm font-[500] transition-all hover:text-slate-600 hover:bg-sky-300/20 hover:dark:bg-sky-300/10",
+            isChapterActive &&
+              "text-slate-700 bg-sky-300/20 dark:bg-sky-300/10 hover:text-slate-700"
           )}
         >
-          {label}
-        </span>
-      </div>
-      <div
-        className={cn(
-          "ml-auto opacity-0 border-2 border-slate-700 h-full transition-all",
-          isActive && "opacity-100",
-          isCompleted && "border-emerald-600"
-        )}
-      />
-    </button>
+          <div className="flex items-center gap-x-1 md:gap-x-3">
+            <Icon
+              size={22}
+              className={cn(
+                "text-slate-500 dark:text-foreground ml-2",
+                (isChapterActive || isCompleted) &&
+                  "text-sky-700 dark:text-sky-700"
+              )}
+            />
+            <span
+              className={cn(
+                "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-56",
+                (isChapterActive || isCompleted) &&
+                  "text-sky-700 dark:text-sky-700"
+              )}
+            >
+              {label}
+            </span>
+            <ChevronDown
+              size={22}
+              className={cn(
+                "text-slate-500 dark:text-foreground",
+                (isChapterActive || isCompleted) &&
+                  "text-sky-700 dark:text-sky-700"
+              )}
+            />
+          </div>
+        </button>
+      </CollapsibleTrigger>
+
+      <CollapsibleContent>
+        {subChapters.map((subChapter) => (
+          <SidebarSubChapter
+            key={subChapter.id}
+            courseId={courseId}
+            chapterId={chapterId}
+            subChapterId={subChapter.id}
+            subChapter={subChapter}
+            isCompleted={isCompleted}
+            isSubChapterCompleted={!!subChapter.userProgress?.[0]?.isCompleted}
+          />
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 
