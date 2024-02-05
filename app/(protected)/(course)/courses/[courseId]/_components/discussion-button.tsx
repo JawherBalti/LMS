@@ -17,31 +17,32 @@ const DiscussionButton = ({ courseId }: { courseId: string }) => {
       onClick={onClick}
       type="button"
       className={cn(
-        "flex items-center gap-x-2 text-slate-500 text-sm font-[500] pl-6 transition-all hover:text-slate-600 hover:bg-slate-300/20",
+        "relative max-w-full text-slate-500 text-sm font-[500] transition-all hover:text-slate-600 hover:bg-sky-300/20 hover:dark:bg-sky-300/10",
         isActive &&
-          "text-slate-700 bg-slate-200/20 hover:bg-slate-200/20 hover:text-slate-700"
+          "text-slate-700 bg-sky-300/20 dark:bg-sky-300/10 hover:text-slate-700"
       )}
     >
-      <div className="flex items-center gap-x-2 py-4">
+      <div className="flex items-center py-4 gap-x-1 md:gap-x-3">
         <MessageSquareText
           size={22}
           className={cn(
-            "text-slate-500 dark:text-foreground",
-            isActive && "text-slate-700 dark:text-foreground"
+            "text-slate-500 dark:text-foreground ml-2",
+            isActive && "text-sky-700 dark:text-sky-700"
           )}
         />
         <span
           className={cn(
-            "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-60",
-            isActive && "text-slate-700 dark:text-foreground"
+            "text-slate-500 dark:text-foreground break-words line-clamp-2 w-48 sm:w-52 md:w-56",
+            isActive && "text-sky-700 dark:text-sky-700"
           )}
         >
           Course discussion
         </span>
+
       </div>
       <div
         className={cn(
-          "ml-auto opacity-0 border-2 border-slate-700 h-full transition-all",
+          "absolute top-0 right-0 opacity-0 border-2 border-sky-700 h-full w-1 transition-all",
           isActive && "opacity-100"
         )}
       />
