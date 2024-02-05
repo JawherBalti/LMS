@@ -10,8 +10,8 @@ import { ModeToggle } from "./mode-toggle";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
-  const router = useRouter();
 
+  const isAdminPage = pathname?.startsWith("/admin");
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.includes("/course");
   const isSearchPage = pathname === "/search";
@@ -24,7 +24,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex items-center gap-x-2 ml-auto">
-        {isTeacherPage || isCoursePage ? (
+        {isTeacherPage || isCoursePage|| isAdminPage ? (
           <Link href="/dashboard">
             <Button size="sm" variant="ghost">
               <ExitIcon className="h-4 w-4 mr-2" />
@@ -32,7 +32,7 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : (
-          <Link href="/teacher/courses">
+          <Link href="/dashboard">
             <Button size="sm" variant="ghost">
               <BackpackIcon className="h-4 w-4 mr-2" />
               Teacher mode
