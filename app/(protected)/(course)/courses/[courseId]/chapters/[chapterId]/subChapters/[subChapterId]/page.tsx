@@ -9,6 +9,9 @@ import { CardTitle } from "@/components/ui/card";
 import { VideoPlayer } from "./_components/video-player";
 import CourseProgressButton from "./_components/course-progress-button";
 import CourseEnrollButton from "./_components/course-enroll-button";
+import Image from "next/image";
+import Link from "next/link";
+import { formatDate } from "@/lib/format";
 
 const SubChpaterIdPage = async ({
   params,
@@ -22,6 +25,7 @@ const SubChpaterIdPage = async ({
     subChapter,
     chapter,
     course,
+    courseOwner,
     muxData,
     chapterAttachments,
     nextChapter,
@@ -57,6 +61,21 @@ const SubChpaterIdPage = async ({
       )}
 
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
+
+        <CardTitle className="p-4 pl-0">Course owner:</CardTitle>
+        <Link href={`/profile/${courseOwner.id}`} className="flex items-center gap-x-1 pb-4">
+          <Image
+            src={courseOwner.image!}
+            alt="Image"
+            className="rounded-full border"
+            width={40}
+            height={40}
+          />
+          <div className="flex flex-col gap-1">
+            <span className="text-sm font-bold">{courseOwner.name}</span>
+          </div>
+        </Link>
+        <Separator/>
         <CardTitle className="p-4 pl-0">Course description:</CardTitle>
         <p className="break-words pl-4 pb-4">{course?.description}</p>
         <Separator />
@@ -66,7 +85,7 @@ const SubChpaterIdPage = async ({
             chapterId={params.chapterId}
             title={chapter?.title!}
             courseId={params.courseId}
-            // nextChapterId={nextChapter?.id!}
+            nextChapter={nextChapter!}
             nextSubChapterId={nextSubChapter?.id!}
             playBackId={muxData?.playbackId!}
             isLocked={isLocked}
@@ -83,7 +102,7 @@ const SubChpaterIdPage = async ({
                 subChapterId={params.subChapterId}
                 chapterId={params.chapterId}
                 courseId={params.courseId}
-                // nextChapterId={nextChapter?.id}
+                nextChapter={nextChapter!}
                 nextSubChapterId={nextSubChapter?.id!}
                 isCompleted={!!userProgress?.isCompleted}
               />

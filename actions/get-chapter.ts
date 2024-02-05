@@ -29,7 +29,8 @@ export const getChapter = async ({
             },
             select: {
                 description: true,
-                price: true
+                price: true,
+                userId: true
             }
         })
 
@@ -49,9 +50,23 @@ export const getChapter = async ({
 
         if (!subChapter || !chapter || !course) throw new Error("Chapter or course not found")
 
+        const courseOwner =await db.user.findUnique({
+            where: {
+                id: course.userId
+            },
+            select: {
+                id: true,
+                name: true,
+                image: true,
+                emailVerified: true
+            }
+        })
+
+        if (!courseOwner) throw new Error("Could not find course owner")
+
         let muxData: MuxData | null = null
         let chapterAttachments: ChapterAttachment[] = []
-        let nextChapter: Chapter | null = null
+        let nextChapter: Chapter & {subChapters: SubChapter[]} | null = null
         let nextSubChapter: SubChapter | null = null
 
         if (purchase) {
@@ -69,18 +84,21 @@ export const getChapter = async ({
                 }
             })
 
-            // nextChapter = await db.chapter.findFirst({
-            //     where: {
-            //         courseId,
-            //         isPublished: true,
-            //         position: {
-            //             gt: chapter?.position
-            //         }
-            //     },
-            //     orderBy: {
-            //         position: "asc"
-            //     }
-            // })
+            nextChapter = await db.chapter.findFirst({
+                where: {
+                    courseId,
+                    isPublished: true,
+                    position: {
+                        gt: chapter?.position
+                    }
+                },
+                include: {
+                    subChapters: true
+                },
+                orderBy: {
+                    position: "asc"
+                }
+            })
 
             nextSubChapter = await db.subChapter.findFirst({
                 where: {
@@ -108,6 +126,7 @@ export const getChapter = async ({
             subChapter,
             chapter,
             course,
+            courseOwner,
             muxData,
             chapterAttachments,
             nextChapter,
@@ -120,6 +139,7 @@ export const getChapter = async ({
             subChapter: null,
             chapter: null,
             course: null,
+            courseOwner: null,
             muxData: null,
             chapterAttachments: [],
             nextChapter: null,
