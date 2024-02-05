@@ -137,6 +137,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
               <PriceForm
                 initialData={course}
                 courseId={course.id}
+                isCourseFree={isCourseFree}
               />
             </div>
             <div>
