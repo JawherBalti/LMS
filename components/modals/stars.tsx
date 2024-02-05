@@ -1,6 +1,4 @@
-// Stars.tsx
 import { Star } from "lucide-react";
-import { useState } from "react";
 
 interface StarsProps {
     review: string
@@ -42,7 +40,7 @@ export const Stars = ({review, setReview, setReviewValue, hoverIndex, setHoverIn
 
  return (
     <div className="flex flex-col justify-center items-center">
-      <span>{review}</span>
+      <span className="font-bold pb-2">{review}</span>
       <div className="flex gap-x-2 justify-center">
         {[...Array(5)].map((_, index) => (
           <Star
@@ -55,7 +53,7 @@ export const Stars = ({review, setReview, setReviewValue, hoverIndex, setHoverIn
                 ? "rgb(234 179 8 / var(--tw-text-opacity))"
                 : "transparent"
             }
-            size={60}
+            size={50}
           />
         ))}
       </div>
