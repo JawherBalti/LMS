@@ -66,16 +66,26 @@ export const columns: ColumnDef<Course>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Published
+          Status
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const isPublished = row.getValue("isPublished") || false;
+      const isPending = row.original.isPending || false;
       return (
-        <Badge className={cn("bg-slate-500", isPublished && "bg-sky-700")}>
-          {isPublished ? "Published" : "Draft"}
+        <Badge
+          className={cn(
+            " text-white",
+            isPublished
+              ? "bg-emerald-700 hover:bg-emerald-700"
+              : isPending
+              ? "bg-sky-700 hover:bg-sky-700"
+              : "bg-slate-700 hover:bg-slate-700"
+          )}
+        >
+          {isPublished ? "Published" : isPending ? "Pending" : "Draft"}
         </Badge>
       );
     },
