@@ -14,13 +14,13 @@ interface CourseActionsProps {
   price: number;
   disabled: boolean;
   courseId: string;
-  isPublished: boolean;
+  isPending: boolean;
+  isPublished: boolean
 }
 const CourseActions = ({
-  isCourseFree,
-  price,
   disabled,
   courseId,
+  isPending,
   isPublished,
 }: CourseActionsProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +56,7 @@ const CourseActions = ({
   const onClick = async () => {
     try {
       setIsLoading(true);
-      if (isPublished) {
+      if (isPending) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
         toast({
           title: "Course unpublished",
@@ -67,7 +67,7 @@ const CourseActions = ({
           className: "border-black dark:border-white",
         });
       } else {
-        await axios.patch(`/api/courses/${courseId}/publish`);
+        await axios.patch(`/api/courses/${courseId}/publish`, {isAdmin: false});
         toast({
           title: "Course published",
           description: "You have published a course",
@@ -98,7 +98,7 @@ const CourseActions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {isPending || isPublished? "Unpublish" : "Publish"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button size="sm" disabled={isLoading}>

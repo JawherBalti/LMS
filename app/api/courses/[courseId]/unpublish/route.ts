@@ -22,6 +22,7 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
                 userId: user.id
             },
             data: {
+                isPending: false,
                 isPublished: false
             }
         })
