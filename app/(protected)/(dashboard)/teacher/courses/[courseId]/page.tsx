@@ -72,10 +72,16 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
   return (
     <>
-      {!course.isPublished && (
+      {!course.isPublished && !course.isPending && (
         <Banner
           variant="warning"
           label="This course is not published. It will not be visible to the students."
+        />
+      )}
+      {!course.isPublished && course.isPending && (
+        <Banner
+          variant="info"
+          label="Waiting for validation by an admin."
         />
       )}
       <div className="p-6">
@@ -99,6 +105,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             price={course.price!}
             disabled={!isComplete}
             courseId={params.courseId}
+            isPending={course.isPending}
             isPublished={course.isPublished}
           />
         </div>
