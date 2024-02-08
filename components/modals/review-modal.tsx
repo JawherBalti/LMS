@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { useState } from "react";
-import { Stars } from "./stars";
+import { Stars } from "../stars";
 import { useToast } from "../ui/use-toast";
 import { AlertTriangle, CheckCircle } from "lucide-react";
 
