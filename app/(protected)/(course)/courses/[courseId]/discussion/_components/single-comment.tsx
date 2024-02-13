@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/format";
 import {
   AlertTriangle,
   CheckCircle,
+  Flag,
   Loader2,
   Reply as ReplyIcon,
   TextQuote,
@@ -19,6 +20,8 @@ import { useCallback, useEffect, useState } from "react";
 import ReplyForm from "./reply-form";
 import Replies from "./replies";
 import { useToast } from "@/components/ui/use-toast";
+import { ReportModal } from "@/components/modals/report-modal";
+import RadioGroupForm from "./radio-group-form";
 
 type CommentsListType = Comment & {
   user: {
@@ -49,6 +52,8 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
   const [repliesCount, setRepliesCount] = useState(0);
   const [isReplyClicked, setIsReplyClicked] = useState(false);
   const [isShowRepliesClicked, setIsShowRepliesClicked] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+
   const { toast } = useToast();
 
   const params = useParams();
@@ -137,6 +142,31 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
     setIsShowRepliesClicked(true);
   };
 
+  const onClick = async () => {
+    try {
+      await axios.post(`/api/courses/${params.courseId}/reports`, {
+        commentId: comment.id,
+        replyId: null,
+        reportReason,
+      });
+
+      toast({
+        title: "Report sent",
+        description: "A report was sent to the admin",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
+    } catch {
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col p-2" key={comment.id}>
@@ -193,6 +223,15 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
             <ReplyIcon className="h-4 w-4 mr-2" />
             Reply
           </Button>
+          <ReportModal
+            radioGroup={<RadioGroupForm setReportReason={setReportReason} />}
+            onConfirm={onClick}
+          >
+            <Button size="sm" variant="ghost">
+              <Flag className="h-4 w-4 mr-2" />
+              Report
+            </Button>
+          </ReportModal>
           {userId === comment.userId && (
             <Button
               onClick={() => deleteComment(comment.id)}
@@ -227,6 +266,7 @@ const SingleComment = ({ comment, userId }: CommentsListProps) => {
               reply={reply}
               userId={userId}
               commentId={comment.id}
+              courseId={params.courseId as string}
             />
           </div>
         ))}
