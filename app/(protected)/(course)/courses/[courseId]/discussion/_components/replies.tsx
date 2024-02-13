@@ -1,11 +1,16 @@
 "use client";
 
 import { formatDate } from "@/lib/format";
-import { Loader2, X } from "lucide-react";
+import { AlertTriangle, CheckCircle, Flag, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Reply } from "@prisma/client";
+import { ReportModal } from "@/components/modals/report-modal";
+import { useState } from "react";
+import RadioGroupForm from "./radio-group-form";
+import axios from "axios";
+import { useToast } from "@/components/ui/use-toast";
 
 type RepliesListType = Reply & {
   user: {
@@ -18,6 +23,7 @@ interface RepliesListProps {
   reply: RepliesListType;
   userId: string;
   commentId: string;
+  courseId: string
   isDeletingReply: boolean;
   selectedReply: string;
   deleteReply: (commentId: string, replyId: string) => Promise<void>;
@@ -27,10 +33,39 @@ const Replies = ({
   reply,
   userId,
   commentId,
+  courseId,
   isDeletingReply,
   selectedReply,
   deleteReply,
 }: RepliesListProps) => {
+  const [reportReason, setReportReason] = useState("");
+  const { toast } = useToast();
+  
+  const onClick = async () => {
+    try {
+      await axios.post(`/api/courses/${courseId}/reports`, {
+        commentId: null,
+        replyId: reply.id,
+        reportReason,
+      });
+
+      toast({
+        title: "Report sent",
+        description: "A report was sent to the admin",
+        action: (
+          <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
+        ),
+        className: "border-black dark:border-white",
+      });
+    } catch {
+      toast({
+        title: "Something went wrong",
+        action: <AlertTriangle className="text-red-600 dark:text-red-600" />,
+        className: "border-black dark:border-white",
+      });
+    }
+  };
+
   return (
     <div className="pl-8">
       <div className="flex flex-col p-2">
@@ -53,18 +88,30 @@ const Replies = ({
         <p className="p-2 pl-4">{reply.reply}</p>
         <div>
           {userId === reply.userId && (
-            <Button
-              onClick={() => deleteReply(commentId, reply.id)}
-              size="sm"
-              variant="ghost"
-            >
-              {isDeletingReply && selectedReply === reply.id ? (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <X className="h-4 w-4 mr-2" />
-              )}
-              Delete
-            </Button>
+            <>
+              <ReportModal
+                radioGroup={<RadioGroupForm setReportReason={setReportReason} />}
+                onConfirm={onClick}
+              >
+                <Button size="sm" variant="ghost">
+                  <Flag className="h-4 w-4 mr-2" />
+                  Report
+                </Button>
+              </ReportModal>
+
+              <Button
+                onClick={() => deleteReply(commentId, reply.id)}
+                size="sm"
+                variant="ghost"
+              >
+                {isDeletingReply && selectedReply === reply.id ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <X className="h-4 w-4 mr-2" />
+                )}
+                Delete
+              </Button>
+            </>
           )}
         </div>
       </div>
