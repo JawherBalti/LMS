@@ -25,12 +25,14 @@ model User {
   image                 String?
   password              String?
   role                  UserRole               @default(USER)
+  isBlocked             Boolean                @default(false)
   accounts              Account[]
   courses               Course[]
   comments              Comment[]
   replies               Reply[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  Report                Report[]
 }
 
 model Course {
@@ -40,6 +42,7 @@ model Course {
   description String?      @db.Text
   imageUrl    String?      @db.Text
   price       Float?
+  isPending   Boolean      @default(false)
   isPublished Boolean      @default(false)
   categoryId  String?
   createdAt   DateTime     @default(now())
@@ -242,6 +245,7 @@ model Comment {
   course    Course?  @relation(fields: [courseId], references: [id], onDelete: Cascade)
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   replies   Reply[]
+  Report    Report[]
 }
 
 model Reply {
@@ -251,6 +255,20 @@ model Reply {
   reply     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Report    Report[]
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id           String   @id @default(cuid())
+  courseId     String
+  reporterId   String
+  commentId    String?
+  replyId      String?
+  reportReason String
+  createdAt    DateTime @default(now())
+  reporter     User     @relation(fields: [reporterId], references: [id])
+  comment      Comment? @relation(fields: [commentId], references: [id])
+  reply        Reply?   @relation(fields: [replyId], references: [id])
 }
