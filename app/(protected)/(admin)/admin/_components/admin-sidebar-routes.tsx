@@ -1,7 +1,7 @@
 "use client";
 
 import AdminSidebarItem from "./admin-sidebar-item";
-import { BarChart, Flag, LayoutList, Users } from "lucide-react";
+import { Flag, LayoutList, Users } from "lucide-react";
 
 const adminRoutes = [
   {
@@ -14,11 +14,11 @@ const adminRoutes = [
     label: "Manage courses",
     href:"/admin/courses"
   },
-  {
-    icon: BarChart,
-    label: "Analytics",
-    href:"/admin/analytics"
-  },
+  // {
+  //   icon: BarChart,
+  //   label: "Analytics",
+  //   href:"/admin/analytics"
+  // },
   {
     icon: Flag,
     label: "Reports",
