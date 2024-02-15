@@ -31,10 +31,14 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    accessorFn: (row) => row.name,
     cell: ({ row }) => {
       const { id } = row.original;
       return (
-        <Link href={`/profile/${id}`} className="flex gap-1 items-center hover:text-sky-700">
+        <Link
+          href={`/profile/${id}`}
+          className="flex gap-1 items-center hover:text-sky-700"
+        >
           <Image
             src={row.original.image!}
             alt="Image"
@@ -60,6 +64,7 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    accessorFn: (row) => row.email,
     cell: ({ row }) => {
       const email = row.getValue("email");
       return email;
@@ -78,10 +83,10 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    accessorFn: (row) => formatDate(row.emailVerified as Date),
     cell: ({ row }) => {
       const joinDate = row.getValue("emailVerified");
-      const formatted = formatDate(joinDate as Date);
-      return formatted;
+      return joinDate;
     },
   },
   {
@@ -97,8 +102,9 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    accessorFn: (row) => (row.isBlocked ? "Blocked" : "Active"),
     cell: ({ row }) => {
-      const isBlocked = row.getValue("isBlocked") as boolean;
+      const isBlocked = row.original.isBlocked;
       return (
         <Badge
           className={cn(
@@ -106,7 +112,7 @@ export const columns: ColumnDef<User>[] = [
             isBlocked && "bg-red-700 hover:bg-red-700"
           )}
         >
-          {isBlocked ? "Blocked" : "Not blocked"}
+          {isBlocked ? "Blocked" : "Active"}
         </Badge>
       );
     },
@@ -124,8 +130,9 @@ export const columns: ColumnDef<User>[] = [
         </Button>
       );
     },
+    accessorFn: (row) => (row.role === "ADMIN" ? "Admin" : "User"),
     cell: ({ row }) => {
-      const role = row.getValue("role");
+      const role = row.original.role;
       return (
         <Badge
           className={cn(
