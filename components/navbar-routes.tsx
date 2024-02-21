@@ -12,6 +12,7 @@ export const NavbarRoutes = () => {
   const pathname = usePathname();
 
   const isAdminPage = pathname?.startsWith("/admin");
+  const isPreviwePage = pathname?.startsWith("/preview");
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isCoursePage = pathname?.includes("/course");
   const isSearchPage = pathname === "/search";
@@ -24,7 +25,7 @@ export const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex items-center gap-x-2 ml-auto">
-        {isTeacherPage || isCoursePage|| isAdminPage ? (
+        {isTeacherPage || isCoursePage|| isAdminPage || isPreviwePage ? (
           <Link href="/dashboard">
             <Button size="sm" variant="ghost">
               <ExitIcon className="h-4 w-4 mr-2" />
@@ -32,7 +33,7 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : (
-          <Link href="/dashboard">
+          <Link href="/teacher/courses">
             <Button size="sm" variant="ghost">
               <BackpackIcon className="h-4 w-4 mr-2" />
               Teacher mode
