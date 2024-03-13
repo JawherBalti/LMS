@@ -1,24 +1,24 @@
 "use client";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { CardWrapper } from "./card-wrapper";
-import { RegisterSchema } from "@/schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { FormError } from "../form-error";
-import { FormSuccess } from "../form-success";
-import { register } from "@/actions/register";
+// import * as z from "zod";
+// import { useForm } from "react-hook-form";
+// import { RegisterSchema } from "@/schemas";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import {
+//   Form,
+//   FormControl,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "../ui/form";
+// import { Input } from "../ui/input";
+// import { Button } from "../ui/button";
+// import { FormError } from "../form-error";
+// import { FormSuccess } from "../form-success";
+// import { register } from "@/actions/register";
+// import Image from "next/image";
 import { useState, useTransition } from "react";
-import Image from "next/image";
+import { CardWrapper } from "./card-wrapper";
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
