@@ -18,6 +18,7 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import { register } from "@/actions/register";
 import { useState, useTransition } from "react";
+import Image from "next/image";
 
 export const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -29,18 +30,18 @@ export const RegisterForm = () => {
     defaultValues: {
       email: "",
       password: "",
-      name:""
+      name: "",
     },
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    setError("")
-    setSuccess("")
+    setError("");
+    setSuccess("");
     startTransition(() => {
-      register(values).then(data => {
-        setError(data.error)
-        setSuccess(data.success)
-      })
+      register(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
     });
   };
 
@@ -51,7 +52,10 @@ export const RegisterForm = () => {
       backButtonHref="/auth/login"
       showSocial
     >
-      <Form {...form}>
+      <></>
+
+      <Image src="/login.jpg" alt="login" width={500} height={500} />
+      {/* <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
             <FormField
@@ -115,7 +119,7 @@ export const RegisterForm = () => {
             Register
           </Button>
         </form>
-      </Form>
+      </Form> */}
     </CardWrapper>
   );
 };
