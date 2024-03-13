@@ -34,13 +34,13 @@ export const LoginForm = () => {
       ? "This email is used to login with a different provider"
       : "";
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof LoginSchema>>({
+  //   resolver: zodResolver(LoginSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  // });
 
   // const onSubmit = (values: z.infer<typeof LoginSchema>) => {
   //   setError("");
