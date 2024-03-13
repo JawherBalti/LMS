@@ -54,7 +54,7 @@ export const RegisterForm = () => {
     >
       <></>
 
-      <Image src="/login.jpg" alt="login" width={500} height={500} />
+      {/* <Image src="/login.jpg" alt="login" width={500} height={500} /> */}
       {/* <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
