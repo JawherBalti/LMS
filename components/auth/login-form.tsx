@@ -71,7 +71,8 @@ export const LoginForm = () => {
       backButtonHref="/auth/register"
       showSocial
     >
-      <Form {...form}>
+      <></>
+      {/* <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
             {showTwoFactor && (
@@ -149,7 +150,7 @@ export const LoginForm = () => {
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
         </form>
-      </Form>
-    </CardWrapper>
+      </Form>*/}
+    </CardWrapper> 
   );
 };
