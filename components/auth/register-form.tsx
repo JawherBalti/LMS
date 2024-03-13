@@ -25,14 +25,14 @@ export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      name: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof RegisterSchema>>({
+  //   resolver: zodResolver(RegisterSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //     name: "",
+  //   },
+  // });
 
   // const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
   //   setError("");
