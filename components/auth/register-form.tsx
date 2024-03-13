@@ -21,9 +21,9 @@ import { useState, useTransition } from "react";
 import { CardWrapper } from "./card-wrapper";
 
 export const RegisterForm = () => {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  // const [isPending, startTransition] = useTransition();
+  // const [error, setError] = useState<string | undefined>("");
+  // const [success, setSuccess] = useState<string | undefined>("");
 
   // const form = useForm<z.infer<typeof RegisterSchema>>({
   //   resolver: zodResolver(RegisterSchema),
