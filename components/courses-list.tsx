@@ -1,4 +1,4 @@
-import { Category, Course, Review } from "@prisma/client";
+import { Category, Course } from "@prisma/client";
 import { CourseCard } from "./course-card";
 
 type CourseWithProgressWithCategory = Course & {
