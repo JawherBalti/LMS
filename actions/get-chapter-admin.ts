@@ -9,7 +9,7 @@ interface GetChapterProps {
 }
 
 export const getChapterAdmin = async ({
-    userId, 
+    // userId,
     courseId, 
     chapterId, 
     subChapterId
