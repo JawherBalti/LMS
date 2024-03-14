@@ -9,17 +9,20 @@ interface GetChapterProps {
 }
 
 export const getChapterAdmin = async ({
-    userId, courseId, chapterId, subChapterId
+    userId, 
+    courseId, 
+    chapterId, 
+    subChapterId
 }: GetChapterProps) => {
     try {
-        const purchase = await db.purchase.findUnique({
-            where: {
-                userId_courseId: {
-                    userId,
-                    courseId
-                }
-            }
-        })
+        // const purchase = await db.purchase.findUnique({
+        //     where: {
+        //         userId_courseId: {
+        //             userId,
+        //             courseId
+        //         }
+        //     }
+        // })
 
         const publishedCourse = await db.course.findUnique({
             where: {
