@@ -12,7 +12,7 @@ const font = Poppins({
 export default function Home() {
   return (
     // redirect("/auth/login")
-    <main className="flex h-full flex-col items-center justify-center">
+    <main className="flex h-full flex-col items-center justify-center bg-white">
       <div className="p-4 sm:p-6 lg:p-8 rounded-xl overflow-hidden">
         <div className="rounded-xl relative aspect-square md:aspect-[2.4/1] overflow-hidden bg-cover">
           <div className="absolute h-full w-full flex flex-col justify-center text-left gap-y-8">
