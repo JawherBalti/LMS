@@ -35,7 +35,7 @@ export default async function RootLayout({
           >
             {children}
           </ThemeProvider>
-          <footer className="h-16 bg-white text-black flex items-center justify-center">
+          <footer className="border-t h-16 bg-white text-black flex items-center justify-center">
             &copy; {date.getFullYear()} Courset, Inc. All rights reserved
           </footer>
         </body>
