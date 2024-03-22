@@ -20,7 +20,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  const date = new Date();
   return (
     <SessionProvider session={session}>
       <html lang="en">
@@ -33,11 +32,8 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <div className="flex flex-col">{children}</div>
           </ThemeProvider>
-          <footer className="border-t h-16 bg-white text-black flex items-center justify-center">
-            &copy; {date.getFullYear()} Courset, Inc. All rights reserved
-          </footer>
         </body>
       </html>
     </SessionProvider>
