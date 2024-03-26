@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import bg from "../public/home.jpg";
 import Image from "next/image";
 import { CarouselData } from "@/components/carousel-data";
+import { getFreeCourses } from "@/actions/get-free-courses";
+import { GetServerSidePropsContext } from "next";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -14,9 +16,11 @@ const font = Poppins({
 const data = [
   1,2,3,4,5,6,7,8,9
 ]
-export default function Home() {
-  const date = new Date();
 
+export default async function Home(props: any) {
+  const date = new Date();
+  const freeCourses = await getFreeCourses();
+console.log(props)
   return (
     // redirect("/auth/login")
     <>
@@ -51,7 +55,7 @@ export default function Home() {
             >
               Free courses
             </h6>
-            <CarouselData data={data}/>
+            <CarouselData data={freeCourses}/>
           </div>
           <div className="p-4 sm:p-6 lg:p-8">
             <h6
