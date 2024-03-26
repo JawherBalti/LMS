@@ -16,7 +16,7 @@ export const formatTotalReviews = (reviews: number) => {
 }
 
 export const formatCourseReview = (courseReview: number) => {
-    return courseReview % 1 === 0 ? courseReview : courseReview.toFixed(1)
+    return courseReview % 1 === 0 ? courseReview : courseReview?.toFixed(1)
 }
 
 export const formatDate = (date: Date) => {
