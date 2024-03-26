@@ -8,8 +8,22 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import CoursesList from "./courses-list";
+import { Category, Course } from "@prisma/client";
 
-export function CarouselData({data}: {data: number[]}) {
+type CourseWithProgressWithCategory = Course & {
+  category: Category | null;
+  chapters: { id: string }[];
+  progress?: number | null;
+  totalReviews: number;
+  courseReview: number;
+};
+
+interface CoursesListProps {
+  data: CourseWithProgressWithCategory[];
+}
+
+export function CarouselData({ data }: CoursesListProps) {
   return (
     <Carousel
       opts={{
@@ -18,17 +32,11 @@ export function CarouselData({data}: {data: number[]}) {
       className="p-8"
     >
       <CarouselContent>
-        {data.map((_, index) => (
-          <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+          <CarouselItem className="">
             <div className="p-1">
-              <Card className="">
-                <CardContent className="flex items-center justify-center p-6">
-                  <span className="text-3xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
+                  <CoursesList items={data} />
             </div>
           </CarouselItem>
-        ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
