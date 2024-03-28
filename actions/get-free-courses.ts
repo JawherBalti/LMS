@@ -35,32 +35,6 @@ export const getFreeCourses = async (): Promise<CourseWithCategory[]> => {
             }
         })
 
-        const coursesWithProgress1: CourseWithCategory[] = await Promise.all(
-            courses.map(async course => {
-                const totalReviews = course.reviews.length
-                const courseReview = totalReviews === 0 ? 0 : course.reviews.reduce((acc, curr) => acc + curr.review, 0) / totalReviews
-
-                return {
-                    ...course,
-                    totalReviews,
-                    progress: null,
-                    courseReview,
-                }
-            })
-        )
-        const coursesWithProgress2: CourseWithCategory[] = await Promise.all(
-            courses.map(async course => {
-                const totalReviews = course.reviews.length
-                const courseReview = totalReviews === 0 ? 0 : course.reviews.reduce((acc, curr) => acc + curr.review, 0) / totalReviews
-
-                return {
-                    ...course,
-                    totalReviews,
-                    progress: null,
-                    courseReview,
-                }
-            })
-        )
         const coursesWithProgress: CourseWithCategory[] = await Promise.all(
             courses.map(async course => {
                 const totalReviews = course.reviews.length
@@ -74,21 +48,8 @@ export const getFreeCourses = async (): Promise<CourseWithCategory[]> => {
                 }
             })
         )
-        const coursesWithProgress3: CourseWithCategory[] = await Promise.all(
-            courses.map(async course => {
-                const totalReviews = course.reviews.length
-                const courseReview = totalReviews === 0 ? 0 : course.reviews.reduce((acc, curr) => acc + curr.review, 0) / totalReviews
 
-                return {
-                    ...course,
-                    totalReviews,
-                    progress: null,
-                    courseReview,
-                }
-            })
-        )
-
-        return [...coursesWithProgress, ...coursesWithProgress2, ...coursesWithProgress3, ...coursesWithProgress1]
+        return coursesWithProgress
     } catch (error) {
         return []
     }
