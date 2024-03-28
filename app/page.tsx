@@ -8,6 +8,11 @@ import Image from "next/image";
 import { CarouselData } from "@/components/carousel-data";
 import { getFreeCourses } from "@/actions/get-free-courses";
 import { GetServerSidePropsContext } from "next";
+import { headers } from "next/headers";
+import { ModeToggle } from "@/components/mode-toggle";
+import { getRecentCourses } from "@/actions/get-recent-courses";
+import { getMostRatedCourses } from "@/actions/get-most-rated-courses";
+import { Navbar } from "./(protected)/(dashboard)/_components/navbar";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -20,11 +25,21 @@ const data = [
 export default async function Home(props: any) {
   const date = new Date();
   const freeCourses = await getFreeCourses();
-console.log(props)
+  // const recentCourses = await getRecentCourses()
+  // const mostRatedCourses = await getMostRatedCourses()
+  
+  const headersList = headers();
+  const activePath = headersList.get("x-invoke-path");
+// const activeUrl = headersList.get("referer");
+// const activeHost = headersList.get("host");
+
+
   return (
     // redirect("/auth/login")
     <>
-      <main className="flex h-full flex-col bg-white">
+        <Navbar/>
+
+      <main className="flex h-full flex-col">
         <div className="p-4 sm:p-6 lg:p-8 rounded-xl">
           <div className="rounded-xl relative aspect-square md:aspect-[2.4/1] overflow-hidden bg-cover">
             <div className="absolute h-full w-full flex flex-col justify-center text-left gap-y-8">
@@ -36,7 +51,7 @@ console.log(props)
               </div>
               <div className="pl-4">
                 <LoginButton>
-                  <Button variant="default" size="lg">
+                  <Button variant="default" size="lg" className="bg-white text-black hover:bg-slate-300 hover:text-black">
                     Sign in
                   </Button>
                 </LoginButton>
@@ -49,7 +64,7 @@ console.log(props)
           <div className="p-4 sm:p-6 lg:p-8">
             <h6
               className={cn(
-                "text-2xl font-semibold text-black drop-shadow-md",
+                "text-2xl font-semibold text-foreground drop-shadow-md",
                 font.className
               )}
             >
@@ -60,24 +75,24 @@ console.log(props)
           <div className="p-4 sm:p-6 lg:p-8">
             <h6
               className={cn(
-                "text-2xl font-semibold text-black drop-shadow-md",
+                "text-2xl font-semibold text-foreground drop-shadow-md",
                 font.className
               )}
             >
               Recently added
             </h6>
-            <div className="text-black">carousel</div>
+            {/* <CarouselData data={recentCourses}/> */}
           </div>
           <div className="p-4 sm:p-6 lg:p-8">
             <h6
               className={cn(
-                "text-2xl font-semibold text-black drop-shadow-md",
+                "text-2xl font-semibold text-foreground drop-shadow-md",
                 font.className
               )}
             >
               Most Rated
             </h6>
-            <div className="text-black">carousel</div>
+            {/* <CarouselData data={mostRatedCourses}/> */}
           </div>
         </div>
       </main>
