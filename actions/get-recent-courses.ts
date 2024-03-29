@@ -28,7 +28,7 @@ export const getRecentCourses = async (): Promise<CourseWithCategory[]> => {
             orderBy: {
                 createdAt: "desc"
             },
-            // take: 6
+            take: 6
         })
 
         const coursesWithProgress: CourseWithCategory[] = await Promise.all(
