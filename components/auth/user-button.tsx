@@ -59,7 +59,7 @@ export const UserButton = () => {
 
         <UserButtonAction action={() => {
           logout()
-          router.push("/")
+          // router.push("/")
         }}>
           <DropdownMenuItem>
             <ExitIcon className="h-4 w-4 mr-2" />
