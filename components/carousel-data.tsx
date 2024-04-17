@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import CoursesList from "./courses-list";
 import { Category, Course } from "@prisma/client";
+import { CourseCard } from "./course-card";
 
 type CourseWithProgressWithCategory = Course & {
   category: Category | null;
@@ -32,14 +33,24 @@ export function CarouselData({ data }: CoursesListProps) {
       className="p-8"
     >
       <CarouselContent>
-          <CarouselItem className="">
-            <div className="p-1">
-                  <CoursesList items={data} />
-            </div>
+        {data.map((item) => (
+          <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/4">
+            <CourseCard
+              id={item.id}
+              title={item.title}
+              imageUrl={item.imageUrl!}
+              chaptersLength={item.chapters.length}
+              price={item.price!}
+              progress={item.progress!}
+              category={item?.category?.name!}
+              totalReviews={item.totalReviews}
+              courseReview={item.courseReview}
+            />
           </CarouselItem>
+        ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="border-foreground" />
+      <CarouselNext className="border-foreground" />
     </Carousel>
   );
 }
