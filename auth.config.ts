@@ -5,9 +5,14 @@ import type { NextAuthConfig } from "next-auth"
 import { getUserByEmail } from "./data/user"
 import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
+import Discord from "next-auth/providers/discord";
 
 export default {
   providers: [
+    Discord({
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET
+    }),
     Github({
       clientId: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET
