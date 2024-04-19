@@ -1,6 +1,6 @@
 "use client";
 
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaDiscord} from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
@@ -11,7 +11,7 @@ export const Social = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
-  const onClick = (provider: "google" | "github") => {
+  const onClick = (provider: "reddit" | "google" | "github" | "discord" | "wordpress" | "linkedin" | "zoom") => {
     signIn(provider, {
       callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
@@ -34,6 +34,14 @@ export const Social = () => {
         onClick={() => onClick("github")}
       >
         <FaGithub className="h-5 w-5" />
+      </Button>
+      <Button
+        size="lg"
+        className="w-full"
+        variant="outline"
+        onClick={() => onClick("discord")}
+      >
+        <FaDiscord className="h-5 w-5 text-[#7289da]" />
       </Button>
     </div>
   );
