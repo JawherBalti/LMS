@@ -1,7 +1,7 @@
 "use client";
 
 import { FaGithub, FaDiscord, FaWordpress, FaLinkedin, FaZhihu } from "react-icons/fa";
-import { FcGoogle, FcReddit } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
@@ -42,14 +42,6 @@ export const Social = () => {
         onClick={() => onClick("discord")}
       >
         <FaDiscord className="h-5 w-5 text-[#7289da]" />
-      </Button>
-            <Button
-        size="lg"
-        className="w-full"
-        variant="outline"
-        onClick={() => onClick("reddit")}
-      >
-        <FcReddit className="h-5 w-5" />
       </Button>
       <Button
         size="lg"
