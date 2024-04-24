@@ -7,9 +7,19 @@ import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
 import Discord from "next-auth/providers/discord";
 import Wordpress from "next-auth/providers/wordpress";
+import Linkedin from "next-auth/providers/linkedin";
+import Zoom from "next-auth/providers/zoom";
 
 export default {
   providers: [
+    Zoom({
+      clientId: process.env.ZOOM_CLIENT_ID,
+      clientSecret: process.env.ZOOM_CLIENT_SECRET,
+    }),
+    Linkedin({
+      clientId: process.env.LINKEDIN_CLIENT_ID,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
+    }),
     Wordpress({
       clientId: process.env.WORDPRESS_CLIENT_ID,
       clientSecret: process.env.WORDPRESS_CLIENT_SECRET,
