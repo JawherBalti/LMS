@@ -13,10 +13,6 @@ import Reddit from "next-auth/providers/reddit";
 
 export default {
   providers: [
-    Reddit({
-      clientId: process.env.REDDIT_CLIENT_ID,
-      clientSecret: process.env.REDDIT_CLIENT_SECRET,
-    }),
     Zoom({
       clientId: process.env.ZOOM_CLIENT_ID,
       clientSecret: process.env.ZOOM_CLIENT_SECRET,
