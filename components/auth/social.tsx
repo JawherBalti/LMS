@@ -1,6 +1,6 @@
 "use client";
 
-import { FaGithub, FaDiscord, FaWordpress, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaDiscord, FaWordpress, FaLinkedin, FaZhihu } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
@@ -11,7 +11,7 @@ export const Social = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
 
-  const onClick = (provider:  "google" | "github" | "discord" | "wordpress" | "linkedin") => {
+  const onClick = (provider: "reddit" | "google" | "github" | "discord" | "wordpress" | "linkedin" | "zoom") => {
     signIn(provider, {
       callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
     });
@@ -43,7 +43,6 @@ export const Social = () => {
       >
         <FaDiscord className="h-5 w-5 text-[#7289da]" />
       </Button>
-
       <Button
         size="lg"
         className="w-full"
@@ -60,7 +59,14 @@ export const Social = () => {
       >
         <FaWordpress className="h-5 w-5" />
       </Button>
-
+      <Button
+        size="lg"
+        className="w-full"
+        variant="outline"
+        onClick={() => onClick("zoom")}
+      >
+        <FaZhihu className="h-5 w-5" />
+      </Button>
     </div>
   );
 };
