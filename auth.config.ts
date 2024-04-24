@@ -9,9 +9,14 @@ import Discord from "next-auth/providers/discord";
 import Wordpress from "next-auth/providers/wordpress";
 import Linkedin from "next-auth/providers/linkedin";
 import Zoom from "next-auth/providers/zoom";
+import Reddit from "next-auth/providers/reddit";
 
 export default {
   providers: [
+    Reddit({
+      clientId: process.env.REDDIT_CLIENT_ID,
+      clientSecret: process.env.REDDIT_CLIENT_SECRET,
+    }),
     Zoom({
       clientId: process.env.ZOOM_CLIENT_ID,
       clientSecret: process.env.ZOOM_CLIENT_SECRET,
