@@ -136,7 +136,6 @@ export const columns: ColumnDef<Course & { user: User }>[] = [
     accessorFn: (row) => row.isPublished ? "Published": "Pending",
     cell: ({ row }) => {
       const isPublished = row.getValue("isPublished") === "Published";
-      console.log(isPublished)
       return (
         <Badge
           className={cn(
