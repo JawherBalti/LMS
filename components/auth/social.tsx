@@ -1,6 +1,6 @@
 "use client";
 
-import { FaGithub, FaDiscord, FaWordpress, FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaDiscord, FaLinkedin } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "../ui/button";
 import { signIn } from "next-auth/react";
@@ -50,14 +50,6 @@ export const Social = () => {
         onClick={() => onClick("linkedin")}
       >
         <FaLinkedin className="h-5 w-5" />
-      </Button>
-      <Button
-        size="lg"
-        className="w-full"
-        variant="outline"
-        onClick={() => onClick("wordpress")}
-      >
-        <FaWordpress className="h-5 w-5" />
       </Button>
     </div>
   );
