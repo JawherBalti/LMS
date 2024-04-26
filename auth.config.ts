@@ -6,31 +6,9 @@ import { getUserByEmail } from "./data/user"
 import Google from 'next-auth/providers/google';
 import Github from 'next-auth/providers/github';
 import Discord from "next-auth/providers/discord";
-import Wordpress from "next-auth/providers/wordpress";
 
 export default {
   providers: [
-    Wordpress({
-      clientId: process.env.WORDPRESS_CLIENT_ID,
-      clientSecret: process.env.WORDPRESS_CLIENT_SECRET,
-      token: {
-        url: 'https://public-api.wordpress.com/oauth2/token',
-        async request(context: any) {
-          const { provider, params: parameters, checks, client } = context
-          const { callbackUrl } = provider
-          console.log(context)
-          const tokenset = await client.grant({
-            grant_type: 'authorization_code',
-            code: parameters.code,
-            redirect_uri: callbackUrl,
-            code_verifier: checks.code_verifier,
-            client_id: process.env.WORDPRESS_CLIENT_ID,
-            client_secret: process.env.WORDPRESS_CLIENT_SECRET,
-          })
-          return { tokens: tokenset }
-        },
-      },
-    }),
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET
