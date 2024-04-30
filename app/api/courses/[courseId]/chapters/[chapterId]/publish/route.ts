@@ -28,13 +28,17 @@ export async function PATCH(req: Request, { params }: { params: { courseId: stri
                 chapterId: params.chapterId
             },
             include: {
-                muxData: true
+                // muxData: true
+                chapterAttachments: true
             }
         })
 
-        const hasMuxData = subChapters.every(subChapter => subChapter.muxData!== null)
-
-        if (!chapter || !hasMuxData || !chapter.title) {
+        // const hasMuxData = subChapters.every(subChapter => subChapter.muxData!== null)
+        const hasAttachments = subChapters.every(subChapter => subChapter.chapterAttachments.length > 0)
+        if (!chapter
+            // || !hasMuxData 
+            || !hasAttachments
+            || !chapter.title) {
             return new NextResponse("Missing required fields", { status: 400 })
         }
 
