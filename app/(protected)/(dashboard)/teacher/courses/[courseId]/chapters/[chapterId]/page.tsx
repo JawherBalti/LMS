@@ -43,7 +43,7 @@ const ChapterIdPage = async ({
   }
   const subChaptersCompleted = chapter.subChapters.every(
     (subChapter) =>
-      subChapter.muxData &&
+      // subChapter.muxData &&
       subChapter.title &&
       subChapter.description &&
       subChapter.chapterAttachments.length !== 0
