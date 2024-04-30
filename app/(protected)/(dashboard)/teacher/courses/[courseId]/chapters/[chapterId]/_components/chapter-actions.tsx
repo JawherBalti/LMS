@@ -58,8 +58,8 @@ const ChapterActions = ({
           `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
         );
         toast({
-          title: "Chapter published",
-          description: "You have published a chapter",
+          title: "Chapter unpublished",
+          description: "You have unpublished a chapter",
           action: (
             <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
           ),
@@ -70,8 +70,8 @@ const ChapterActions = ({
           `/api/courses/${courseId}/chapters/${chapterId}/publish`
         );
         toast({
-          title: "Chapter unpublished",
-          description: "You have unpublished a chapter",
+          title: "Chapter published",
+          description: "You have published a chapter",
           action: (
             <CheckCircle className="text-emerald-600 dark:text-emerald-600" />
           ),
