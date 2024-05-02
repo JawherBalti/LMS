@@ -58,7 +58,7 @@ const SubChapterIdPage = async ({
   const requiredFields = [
     subChapter.title,
     subChapter.description,
-    subChapter.muxData,
+    // subChapter.muxData,
     subChapter.chapterAttachments.length !== 0,
   ];
 
@@ -143,12 +143,12 @@ const SubChapterIdPage = async ({
                 <IconBadge icon={Video} />
                 <h2 className=" text-xl">Add a video</h2>
               </div>
-              <SubChapterVideoForm
+              {/* <SubChapterVideoForm
                 initialData={subChapter}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
                 subChapterId={params.subChapterId}
-              />
+              /> */}
             </div>
           </div>
         </div>
