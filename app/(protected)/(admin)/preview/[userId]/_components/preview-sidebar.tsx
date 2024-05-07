@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import PreviewSidebarItem from "./preview-sidebar-item";
 import PreviewAttachments from "./preview-attachments";
 import PreviewActions from "./preview-actions";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 type ChapterWithSubChapters = Chapter & {
   subChapters: SubChapter[];
@@ -26,6 +28,13 @@ const PreviewSidebar = async ({ course }: PreviewSidebarProps) => {
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto bg-background dark:bg-background shadow-sm">
       <div className="p-8 flex flex-col border-b">
+        <Link
+          href={`/admin/courses`}
+          className="flex items-center text-sm hover:opacity-75 transition mb-6"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to courses
+        </Link>
         <h1 className="font-semibold break-words">{course.title}</h1>
         <PreviewActions
           courseId={course.id}
