@@ -113,7 +113,7 @@ const SubChaptersList = ({
                     <div className="ml-auto pr-2 flex items-center gap-x-2">
                       {!subChapter.title ||
                       !subChapter.description ||
-                      !subChapter.muxData ||
+                      // !subChapter.muxData ||
                       subChapter.chapterAttachments.length === 0 ? (
                         <Badge className="bg-slate-500">
                           Complete all fields
