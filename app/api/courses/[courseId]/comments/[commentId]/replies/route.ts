@@ -53,6 +53,6 @@ export async function GET(req: Request, { params }: { params: { commentId: strin
         })
         return NextResponse.json({replies, repliesCount: replies.length})
     } catch (error) {
-        return Response.json({ error:"Cannot get messages" }, { status: 500 });
+        return new NextResponse("Internal Error", {status:500})
     }
 }
