@@ -25,7 +25,7 @@ const data = [
 export default async function Home(props: any) {
   const date = new Date();
   const freeCourses = await getFreeCourses();
-  // const recentCourses = await getRecentCourses()
+  const recentCourses = await getRecentCourses()
   // const mostRatedCourses = await getMostRatedCourses()
   
   const headersList = headers();
@@ -81,7 +81,7 @@ export default async function Home(props: any) {
             >
               Recently added
             </h6>
-            {/* <CarouselData data={recentCourses}/> */}
+            <CarouselData data={recentCourses}/>
           </div>
           <div className="p-4 sm:p-6 lg:p-8">
             <h6
