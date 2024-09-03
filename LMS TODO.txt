@@ -1,0 +1,20 @@
+1- Course rating system (done)
+2- Comments system / Discussion section (done)
+4- Sub chapters instead of chapters (done)
+5- Sub chatper attachments instead of course attachments (done)
+6- Course creator profile(done)
+7- Admin dashboard
+    a- get a list of all users (done)
+    b- ban/block users (done)
+    c- get a list of all courses (done)
+    d- delete courses (done)
+    e- validate course by admin before being published (done)
+    f- analytics / income / best sellers
+8- remove email/password auth (done)
+9- Home page (done)
+10- Add categories by admin
+11- pdf file preview (done)
+12- replace videos with files (done)
+13- add more providers for login (done)
+14- Internationalization
+15- Paginate APIs
