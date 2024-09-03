@@ -8,6 +8,7 @@ import { VideoPlayer } from "./_components/video-player";
 import Image from "next/image";
 import Link from "next/link";
 import getChapterAdmin from "@/actions/get-chapter-admin";
+import PdfViewer from "./_components/pdf-viewer";
 
 const SubChpaterIdPage = async ({
   params,
@@ -68,7 +69,7 @@ const SubChpaterIdPage = async ({
         <p className="break-words pl-4 pb-4">{course?.description}</p>
         <Separator />
         <div className="p-4">
-          <VideoPlayer
+          {/* <VideoPlayer
             chapterId={params.chapterId}
             title={chapter?.title!}
             courseId={params.previewId}
@@ -76,7 +77,8 @@ const SubChpaterIdPage = async ({
             nextSubChapterId={nextSubChapter?.id!}
             playBackId={muxData?.playbackId!}
             completeOnEnd={true}
-          />
+          /> */}
+          <PdfViewer subChapterAttachments={chapterAttachments}/>
         </div>
         <div className="full">
           <div className="p-4 pl-0 flex flex-col md:flex-row items-center justify-between w-full">
