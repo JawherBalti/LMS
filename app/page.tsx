@@ -26,7 +26,7 @@ export default async function Home(props: any) {
   const date = new Date();
   const freeCourses = await getFreeCourses();
   const recentCourses = await getRecentCourses()
-  // const mostRatedCourses = await getMostRatedCourses()
+  const mostRatedCourses = await getMostRatedCourses()
   
   const headersList = headers();
   const activePath = headersList.get("x-invoke-path");
@@ -92,7 +92,7 @@ export default async function Home(props: any) {
             >
               Most Rated
             </h6>
-            {/* <CarouselData data={mostRatedCourses}/> */}
+            <CarouselData data={mostRatedCourses}/>
           </div>
         </div>
       </main>
